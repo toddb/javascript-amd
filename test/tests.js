@@ -1,0 +1,9 @@
+require(
+  [
+  '../../test/spec_events',
+  '../../test/spec_link',
+  '../../test/spec_loading',
+  '../../test/spec_views',
+  '../../test/spec_main'
+  ]
+)
