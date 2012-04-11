@@ -1,4 +1,4 @@
-define("coffee/main", ['utils/log', 'jquery', 'coffee/loader', 'date'], function( log, $, loader ){
+define("coffee/main", ['utils/log', 'jquery', 'coffee/loader'], function( log, $, loader ){
   
   log.loader("coffee/main")
     
@@ -6,21 +6,24 @@ define("coffee/main", ['utils/log', 'jquery', 'coffee/loader', 'date'], function
     
     $('<div id="coffee">').appendTo('body')
 
-    // TODO: refactor params to object literal
-    loader.init('#coffee', 
-      require('text!coffee/views/index.html'), 
-      '#coffee-orders', 
-      require('text!coffee/views/_item.html'), 
-      require('coffee/link').get(), 
-      "#coffee .order", 
-      function(){ 
-        var now = new Date();
-        return { type: 'small', ordered: now.toUTCString() } 
-      } 
-    )
-
-    log.debug('ensure all dates are formatted - attaching to class date')
-    $(".date").easydate();
+    loader.init({
+      instructions: {
+        id: '#coffee',
+        tmpl: require('text!coffee/views/index.html')
+      },
+      orders: {
+        id: '#coffee-orders',
+        tmpl: require('text!coffee/views/_item.html'),
+        items: require('coffee/link').get()
+      },
+      add: {
+        id: '#coffee .order',
+        click: function(){ 
+          var now = new Date();
+          return { type: 'small', ordered: now.toUTCString() } 
+        }
+      }
+    })
     
   })
 

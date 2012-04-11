@@ -21,7 +21,7 @@ define('coffee/link', ['utils/log'], function( log ){
   }
   
   function ajaxSet( val, success){
-    log.debug("just kidding!")
+    log.debug("update!")
     success( val )
   }
   

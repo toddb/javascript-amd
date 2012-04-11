@@ -43,7 +43,7 @@ namespace :build do
 
     FileUtils.cp_r 'build/images',                "dist", :verbose => true 
 
-    FileUtils.cp_r 'README.txt',                  "dist", :verbose => true 
+    FileUtils.cp_r 'README.md',                  "dist", :verbose => true 
 
     FileUtils.rm_r Dir.glob('dist/**/.svn')
     FileUtils.rm_r Dir.glob('dist/**/.DS_Store')

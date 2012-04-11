@@ -1,28 +1,29 @@
 describe("Events - add order", function() {
-  console.log("bbba")
   
   var data = { type: 'small', ordered: 'now' };
   
-  beforeEach(_requires(["coffee/loader"], function(){ _ = arguments[0] }));
+  beforeEach(_requires(["coffee/loader"], function( l ){ loader = l }));
   
   it("should be able to register add order handler", function() {
-    spyOn(_, 'order').andCallThrough()
-    _.orderHandler( $('#test'), function(){ return data } )
+    spyOn(loader, 'order').andCallThrough()
+    var callback = jasmine.createSpy();
+    loader.orderHandler( $('#test'), callback )
     
     $('#test').click()
     
-    expect(_.order).toHaveBeenCalled()
+    expect(loader.order).toHaveBeenCalled()
+    expect(callback).toHaveBeenCalled()
   });
   
   it("should save the order and update the view to the customer", function() {
-    link = require('coffee/link')
+    var link = require('coffee/link')
     
     spyOn(link, 'set').andCallThrough()
     spyOn($, 'observable').andCallThrough()
     
-    _.order( data, link  )
-    
-    expect(link.set).toHaveBeenCalled()
+    loader.order.call( link, data )
+
+    expect(link.set).toHaveBeenCalledWith( data, jasmine.any(Function) )
     expect($.observable).toHaveBeenCalled()   
   });
   

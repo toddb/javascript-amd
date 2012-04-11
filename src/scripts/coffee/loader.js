@@ -1,21 +1,37 @@
-define('coffee/loader', ['utils/log', 'jquery', 'coffee/link', 'jsrender', 'jsobservable', 'jsviews'], function( log, $, link ){
+define('coffee/loader', ['utils/log', 'jquery', 'coffee/link', 'jsrender', 'jsobservable', 'jsviews', 'date'], function( log, $, link ){
   
   log.loader('coffee/loader')
   
-  var store = [];
+  var store = [],
+    settings,
+    defaults = {
+      instructions: {
+        id: '',
+        tmpl: ''
+      },
+      orders: {
+        id: '',
+        tmpl: '',
+        dates: '.date',
+        items: {}
+      },
+      add: {
+        id: '',
+        click: function(){}
+      }
+    }
   
-  function init( parentId, parent_template, childId, child_template, data, el, handler, renderer){
+  function init( opts ){
+       
+    settings = $.extend(true, defaults, opts);
+    store = settings.orders.items
     
-    /*
-    * Note: renderer is optionally passed in and allows for spies - hhhmmmmm
-    */    
-    var $this = renderer || this
+    this.loadTemplates( settings.instructions.tmpl, settings.orders.tmpl );
+    this.renderParent( settings.instructions.id, {} );
+    this.renderChild( settings.orders.id, store ); 
+    this.orderHandler( settings.add.id, settings.add.click )
     
-    store = data
-    $this.loadTemplates( parent_template, child_template );
-    $this.renderParent( parentId, {} );
-    $this.renderChild( childId, store ); 
-    $this.orderHandler( el, handler )
+    formatDates( $(settings.orders.dates) )
     
     log.debug("Main page - rendered")
   }
@@ -35,18 +51,24 @@ define('coffee/loader', ['utils/log', 'jquery', 'coffee/link', 'jsrender', 'jsob
   }  
   
   function orderHandler( el, cb ){
-    var $this = this
+    var that = this
     $(el).click( function(){
-      return $this.order.apply( $this, [cb()] )
+       that.order.call( link, cb() )
+       formatDates( $( settings.orders.dates ) )
     })
   }
   
   function order( val ){
-    // either inject the store or use the default implementation - this is useful for testing
-    link = arguments[1] || link
-    link.set( val, function( val ){
+    // context is link data store
+    this.set( val, function( val ){
           $.observable( store ).insert( store.length, val);
     } ) 
+  }
+  
+  function formatDates( el ){
+    // note: easydate doesn't use jQuery live and thus all need to refreshed each time
+    log.debug('ensure all dates are formatted')
+    el.easydate();
   }
     
   return {
