@@ -1,5 +1,7 @@
 = Sample for javascript AMD
 
+There are presentation notes about this code at: http://www.slideshare.net/toddbr/javascript-firstclass-citizenery
+
 == DESCRIPTION:
 
 Sample code in javascript to demonstrate the requirejs library (using node.js) and jasmine for BDD-style testing.
