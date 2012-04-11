@@ -7,12 +7,14 @@ describe("Events - add order", function() {
   it("should be able to register add order handler", function() {
     spyOn(loader, 'order').andCallThrough()
     var callback = jasmine.createSpy();
-    loader.orderHandler( $('#test'), callback )
+    var success = jasmine.createSpy();
+    loader.orderHandler( $('#test'), callback, success )
     
     $('#test').click()
     
     expect(loader.order).toHaveBeenCalled()
     expect(callback).toHaveBeenCalled()
+    expect(success).toHaveBeenCalled()
   });
   
   it("should save the order and update the view to the customer", function() {

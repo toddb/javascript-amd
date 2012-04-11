@@ -29,7 +29,7 @@ define('coffee/loader', ['utils/log', 'jquery', 'coffee/link', 'jsrender', 'jsob
     this.loadTemplates( settings.instructions.tmpl, settings.orders.tmpl );
     this.renderParent( settings.instructions.id, {} );
     this.renderChild( settings.orders.id, store ); 
-    this.orderHandler( settings.add.id, settings.add.click )
+    this.orderHandler( settings.add.id, settings.add.click, function(){ formatDates( $( settings.orders.dates ) ) }  )
     
     formatDates( $(settings.orders.dates) )
     
@@ -50,11 +50,11 @@ define('coffee/loader', ['utils/log', 'jquery', 'coffee/link', 'jsrender', 'jsob
     $.link.child( el, data );       
   }  
   
-  function orderHandler( el, cb ){
+  function orderHandler( el, cb, success ){
     var that = this
     $(el).click( function(){
        that.order.call( link, cb() )
-       formatDates( $( settings.orders.dates ) )
+       success()
     })
   }
   
