@@ -4,15 +4,15 @@ describe("Events - add order", function() {
   
   beforeEach(_requires(["coffee/loader"], function( l ){ loader = l }));
   
-  it("should be able to register add order handler", function() {
+  it("should be able to register add order handler and have it invoked on click", function() {
     spyOn(loader, 'order').andCallThrough()
-    var callback = jasmine.createSpy();
+    var callback = jasmine.createSpy().andReturn( data);
     var success = jasmine.createSpy();
     loader.orderHandler( $('#test'), callback, success )
     
     $('#test').click()
     
-    expect(loader.order).toHaveBeenCalled()
+    expect(loader.order).toHaveBeenCalledWith( data )
     expect(callback).toHaveBeenCalled()
     expect(success).toHaveBeenCalled()
   });
