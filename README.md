@@ -1,8 +1,8 @@
-= Sample for javascript AMD
+# Sample for javascript AMD
 
 There are presentation notes about this code at: http://www.slideshare.net/toddbr/javascript-firstclass-citizenery
 
-== DESCRIPTION:
+## DESCRIPTION:
 
 Sample code in javascript to demonstrate the requirejs library (using node.js) and jasmine for BDD-style testing.
 
@@ -10,20 +10,21 @@ It demonstrates test-driven client-side Javascript development, including lintin
 
 It also demonstrates different types of testing: testing plain html, events and mocking.
 
-== FEATURES/PROBLEMS:
+## FEATURES/PROBLEMS:
 
 * to run tests and src/app.html you first need to build so that html is wrapped
 
-== TODO:
+## TODO:
 
 * setup node.js as out-of-process localhost for serving up html files
 * write this app using a REST style
 
-== SYNOPSIS:
+## SYNOPSIS:
 
 
 Use rake to see all tasks. Key tasks are build, test:acceptance and test:specs
 
+<pre>
 	$ rake -T
 	rake all              # Build and release
 	rake build            # Create the release [default]
@@ -39,30 +40,30 @@ Use rake to see all tasks. Key tasks are build, test:acceptance and test:specs
 	rake test:example     # Show example
 	rake test:node        # Run spec tests in node.js
 	rake test:specs       # Run spec tests in browser
-
+</pre>
 
 == REQUIREMENTS:
 
 The app uses 
 
- - ruby (currently using 1.8.7)
- - rake (currently 0.8.7)
- - node.js (currently 0.5.0)
+* ruby (currently using 1.8.7)
+* rake (currently 0.8.7)
+* node.js (currently 0.5.0)
 
 Tested on Max OSX with Mozilla 8 and Chrome 17.
 
-== BUILDING
+## BUILDING
 
-$ rake build
+<pre>$ rake build</pre>
 
-== RELEASING
+## RELEASING
 
 * create an upload.sh file that will release to your environment
 * all release files in dist/
 
-$ rake release
+<pre>$ rake release</pre>
 
-== LICENSE:
+## LICENSE:
 
 (BSD License)
 
