@@ -244,7 +244,7 @@ define(
             put: ajaxPut,
             post: ajaxPost,
             'delete': ajaxDelete,
-            _delete: ajaxDelete
+            _delete: ajaxDelete,
 
             // Change the current documentation location to the first link that 
             // matches the given
