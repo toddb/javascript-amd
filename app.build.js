@@ -49,10 +49,10 @@
           name: "coffee/main",
           exclude: [ 'jquery', 'utils/log', 'text', 'jsrender', 'text!coffee/views/_item.html', 'text!coffee/views/index.html']
         },
-        // {
-        //   name: 'coffee/loader',
-        //   exclude: [ 'jquery', 'utils/log', 'text', 'jsrender']
-        // },
+        {
+          name: 'rest-coffee/main',
+          exclude: [ 'jquery', 'utils/log', 'text', 'jsrender', 'underscore']
+        },
         {
           name: 'bootstrap-html',
           exclude: [ 'text', 'utils/log' ]

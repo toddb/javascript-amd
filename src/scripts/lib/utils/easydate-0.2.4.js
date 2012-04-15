@@ -296,7 +296,7 @@
                 date = new Date();
                 date.setTime(time);
                 element.data("easydate.date", date);
-                if(settings.set_title && !element.attr("title"))
+                if(settings && settings.set_title && !element.attr("title")) /* patch guard, tb - apr, 2012 */
                     element.attr("title", timestamp);
             }
         }
@@ -320,7 +320,7 @@
             
         element.html(format_date(date, settings));
         
-        if(settings.live)
+        if(settings && settings.live) /* patch guard, tb - apr, 2012 */
         {
             var timeout = get_timeout_delay(date, settings);
             if(!isNaN(timeout))

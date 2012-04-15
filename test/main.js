@@ -17,17 +17,32 @@ require({
       "jasmine-html": '../../lib/jasmine/jasmine-html',
       "require-jasmine": '../../lib/require-jasmine',
       "require-onerror": '../../lib/require-onerror',
+      "mockjax": '../../lib/mockjax',
       "bootstrap-html": '../../build/scripts/bootstrap-html',
       
       "tests": '../../test/tests'
       },
       priority: ["jquery", "bootstrap"]
     },
-    ['jquery', 'require-onerror','order!jasmine', 'order!jasmine-html', 'order!require-jasmine', 'order!tests'], 
-    function( $, onerror ){
+    ['jquery', 'require-onerror', 'utils/log', 'order!jasmine', 'order!jasmine-html', 'order!require-jasmine', 'order!mockjax', 'order!tests'], 
+    function( $, onerror, log ){
   
       $(function(){
 
+              $.mockjaxSettings = {
+                log:           log,
+                status:        200,
+                responseTime:  20,
+                isTimeout:     false,
+                contentType:   'text/plain',
+                response:      '', 
+                responseText:  '',
+                responseXML:   '',
+                proxy:         '',
+                lastModified:  null,
+                etag:          '',
+              };
+              
               // add a div element to attach tests
               $('<div>', { id:'test', class:'test'}).appendTo('body')
               onerror.init();

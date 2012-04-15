@@ -4,6 +4,8 @@ require(
   '../../test/spec_link',
   '../../test/spec_loading',
   '../../test/spec_views',
-  '../../test/spec_main'
+  '../../test/spec_main',
+  '../../test/utils/spec_semanticLink',
+  '../../test/utils/spec_httpCall'
   ]
 )

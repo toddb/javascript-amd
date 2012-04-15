@@ -1,4 +1,6 @@
-define('utils/css', ['utils/log', 'jquery'], function( log, $ ){
+define('utils/css', 
+  ['utils/log', 'jquery'], 
+  function( log, $ ){
   
   log.loader('utils/css')
   

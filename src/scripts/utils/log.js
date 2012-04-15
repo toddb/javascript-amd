@@ -17,6 +17,10 @@ define('utils/log', function(){
     
     loader: function( obj ){
       console.log( "loading: %s", obj )
+    },
+    
+    error: function( obj ){
+      console.error.apply( console, arguments )
     }
   }
   
