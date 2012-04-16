@@ -24,14 +24,14 @@ describe("Http Call", function() {
         });
      });
      
-     it("should trigger failure callback with accept not found", function() {
+     xit("should trigger failure callback with accept not found", function() {
         $.mockjax({
           url: '*',
           headers: { "Accept": 'application/json' }
         });
      });
      
-     it("should trigger failure callback with accept not found on response", function() {
+     xit("should trigger failure callback with accept not found on response", function() {
         $.mockjax({
           url: '*',
           response: function( settings ){
@@ -50,10 +50,13 @@ describe("Http Call", function() {
 
         waitsFor(function() {
           return onFailure.wasCalled;
-        }); 
+        });
         
-        expect(onSuccess).not.wasCalled();
-        $.mockjaxClear();       
+        runs(function(){
+          expect(onSuccess).not.wasCalled();
+          $.mockjaxClear();          
+        })
+      
      });
 
    });
@@ -104,8 +107,11 @@ describe("Http Call", function() {
           return onSuccess.wasCalled;
         });
 
-        expect(onFailure).not.wasCalled();         
-        $.mockjaxClear();     
+        runs(function(){
+          expect(onFailure).not.wasCalled();         
+          $.mockjaxClear();          
+        })
+   
      });
 
    });

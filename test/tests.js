@@ -5,7 +5,8 @@ require(
   '../../test/spec_loading',
   '../../test/spec_views',
   '../../test/spec_main',
+  '../../test/rest-coffee/spec_main',
   '../../test/utils/spec_semanticLink',
-  '../../test/utils/spec_httpCall'
+  '../../test/utils/spec_httpCall',
   ]
 )

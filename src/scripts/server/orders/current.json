@@ -1,0 +1,12 @@
+{
+  links: [
+    { rel: "alternate", type: "text/html", href: "http://localhost:8888/orders/index" },
+    { rel: "collection", type: "application/json", href: "http://localhost:8888/orders/current" },
+    { rel: "current", type: "application/json", href: "http://localhost:8888/orders/current" },
+    { rel: "item", type: "application/json", href: "http://localhost:8888/orders/1"},
+    { rel: "first", type: "application/json", href: "http://localhost:8888/orders/1"},
+    { rel: "item", type: "application/json", href: "http://localhost:8888/orders/2"},
+    { rel: "item", type: "application/json", href: "http://localhost:8888/orders/3"},
+    { rel: "last", type: "application/json", href: "http://localhost:8888/orders/3"},
+  ]
+}

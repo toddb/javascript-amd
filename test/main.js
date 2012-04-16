@@ -4,6 +4,7 @@ require({
       requirejs: 'lib/requirejs/require-1.0.7',
       order:     'lib/requirejs/order-1.0.5',
       text:      'lib/requirejs/text-1.0.7',
+      json:      'lib/requirejs/json-0.0.1',
       
       jsrender:     'lib/jsviews/jsrender-1.0pre',
       jsobservable: 'lib/jsviews/jsobservable-1.0pre',
@@ -19,12 +20,13 @@ require({
       "require-onerror": '../../lib/require-onerror',
       "mockjax": '../../lib/mockjax',
       "bootstrap-html": '../../build/scripts/bootstrap-html',
+      "server-data": '../../build/scripts/server/main',
       
       "tests": '../../test/tests'
       },
       priority: ["jquery", "bootstrap"]
     },
-    ['jquery', 'require-onerror', 'utils/log', 'order!jasmine', 'order!jasmine-html', 'order!require-jasmine', 'order!mockjax', 'order!tests'], 
+    ['jquery', 'require-onerror', 'utils/log', 'json', 'order!jasmine', 'order!jasmine-html', 'order!require-jasmine', 'order!mockjax', 'server-data', 'order!tests'], 
     function( $, onerror, log ){
   
       $(function(){

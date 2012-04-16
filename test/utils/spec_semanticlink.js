@@ -70,7 +70,6 @@ describe("Semantic link", function() {
      });
 
      afterEach(function() {
-       
        $('link[rel="collection"]').remove()
      });
 

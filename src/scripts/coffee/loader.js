@@ -13,7 +13,7 @@ define('coffee/loader', ['utils/log', 'jquery', 'coffee/link', 'jsrender', 'jsob
         id: '',
         tmpl: '',
         dates: '.date',
-        items: {}
+        items: []
       },
       add: {
         id: '',
@@ -23,7 +23,7 @@ define('coffee/loader', ['utils/log', 'jquery', 'coffee/link', 'jsrender', 'jsob
   
   function init( opts ){
        
-    settings = $.extend(true, defaults, opts);
+    settings = $.extend(true, {}, defaults, opts);
     store = settings.orders.items
     
     this.loadTemplates( settings.instructions.tmpl, settings.orders.tmpl );
@@ -65,6 +65,11 @@ define('coffee/loader', ['utils/log', 'jquery', 'coffee/link', 'jsrender', 'jsob
     } ) 
   }
   
+
+  function add( val ){  // duh, badness - duplicate with order
+    $.observable( store ).insert( store.length, val);
+  }
+  
   function formatDates( el ){
     // note: easydate doesn't use jQuery live and thus all need to refreshed each time
     log.debug('ensure all dates are formatted')
@@ -72,6 +77,7 @@ define('coffee/loader', ['utils/log', 'jquery', 'coffee/link', 'jsrender', 'jsob
   }
     
   return {
+    add: add,
     order: order,
     orderHandler: orderHandler,
     init: init,

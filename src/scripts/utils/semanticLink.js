@@ -174,7 +174,7 @@ define(
                      url: link.href,
                      data: data,
                      dataType: dataType,
-                     contentType: link.type /* set this so the default 'application/x-www-form-urlencoded' is not used*/,
+                     contentType: dataType, //link.type /* set this so the default 'application/x-www-form-urlencoded' is not used*/,
                      beforeSend: function (jqXhr /*, settings */) {
                          if (verb === 'GET') {
                              jqXhr.setRequestHeader("Accept", link.type);
