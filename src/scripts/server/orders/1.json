@@ -1,12 +1,12 @@
 {
-  links: [
-    { rel: "alternate", type: "text/html", href: "http://localhost:8888/orders/.html/1" },
-    { rel: "collection", type: "application/json", href: "http://localhost:8888/orders/current"},
-    { rel: "edit", type: "application/json", href: "http://localhost:8888/orders/.json/1" },
-    { rel: "edit", type: "text/html", href: "http://localhost:8888/orders/.html/1" }
+  "links": [
+    { "rel": "alternate", "type": "text/html", "href": "http://localhost:8888/orders/.html/1" },
+    { "rel": "collection", "type": "application/json", "href": "http://localhost:8888/orders/current"},
+    { "rel": "self", "type": "application/json", "href": "http://localhost:8888/orders/.json/1" },
+    { "rel": "edit", "type": "text/html", "href": "http://localhost:8888/orders/.html/1" }
   ],
-  data: { 
-    type: "small", 
-    ordered: 'now'
-  }
+  "type": "small", 
+  "ordered": "now",
+  "created-by": "john",
+  "created-on": "now"
 }

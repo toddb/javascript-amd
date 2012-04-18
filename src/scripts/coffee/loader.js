@@ -2,29 +2,36 @@ define('coffee/loader', ['utils/log', 'jquery', 'coffee/link', 'jsrender', 'jsob
   
   log.loader('coffee/loader')
   
+  // TODO: store shouldn't be a singleton - need one per instance
   var store = [],
     settings,
     defaults = {
+      appendTo: 'body',
       instructions: {
-        id: '',
+        id: '#coffee',
         tmpl: ''
       },
       orders: {
-        id: '',
+        id: '#coffee-orders',
         tmpl: '',
         dates: '.date',
         items: []
       },
       add: {
-        id: '',
+        id: '#coffee .order',
         click: function(){}
       }
     }
   
   function init( opts ){
-       
+         
     settings = $.extend(true, {}, defaults, opts);
     store = settings.orders.items
+    
+    if (settings.appendTo != ''){
+      // TODO: strip # off #coffee
+      $('<div id="coffee">').appendTo(settings.appendTo)
+    }
     
     this.loadTemplates( settings.instructions.tmpl, settings.orders.tmpl );
     this.renderParent( settings.instructions.id, {} );

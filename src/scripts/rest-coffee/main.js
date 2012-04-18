@@ -1,53 +1,52 @@
 define('rest-coffee/main',
-  ['utils/log', 'jquery', 'utils/semanticLink', 'coffee/loader', 'utils/httpCall' ], 
-  function( log, $, link, loader, httpCall ){
+  ['utils/log', 'jquery', 'underscore', 'utils/semanticLink', 'coffee/loader', 'utils/httpCall' ], 
+  function( log, $, _, link, loader, httpCall ){
   
   log.loader("rest-coffee/main")
     
   $( function(){
-    
-    link
-      .get('HEAD', 'collection', 'application/json')
-      .done( function( links, status, settings ){
-        
-        $('<div id="coffee">').appendTo('body')
-              
-        // TODO: this is so wrong
-        $.each(link.filter( links, "item", "application/json"), function(){
- 
-          httpCall
-            .get( this.href, this.type)
-            .done( function( item, status, settings ){
-              loader.add( item.data )
+
+     loader.init({
+      instructions: {
+        tmpl: require('text!coffee/views/index.html')
+      },
+      orders: {
+        tmpl: require('text!coffee/views/_item.html')
+      },
+      add: {
+        click: function(){ 
+          var now = new Date();
+          return { type: 'small', ordered: now.toUTCString() } 
+        }
+      }
+     })
+
+   })
+  
+  link
+    .get('HEAD', 'collection', 'application/json')
+    .done( function( content, status, settings ){
+            
+        $.when( _.map(content.orders, function( order ){
+          return httpCall.get( order.href, order.type )
+        }))
+        .done( function( data ){
+          _.each( data, function( entry ){
+            entry
+            .done( function( item, status, settings  ){
+              $( function(){
+                loader.add( item)
+              })
             })
-            .fail( function( jqXhrf, status, message ){
-               log.error( arguments )
-            } )         
+            .fail( function( jqXhr, status, message ){
+              log.error( "Items error occured ", arguments)
+            })
+          })
         })
 
-         loader.init({
-           instructions: {
-             id: '#coffee',
-             tmpl: require('text!coffee/views/index.html')
-           },
-           orders: {
-             id: '#coffee-orders',
-             tmpl: require('text!coffee/views/_item.html')
-           },
-           add: {
-             id: '#coffee .order',
-             click: function(){ 
-               var now = new Date();
-               return { type: 'small', ordered: now.toUTCString() } 
-             }
-           }
-          })
-           
-      })
-      .fail( function( jqXhrf, status, message ){
-         log.error( arguments )
-      })
-  
-  })
+    })
+    .fail( function( jqXhr, status, message ){
+       log.error( "HEAD collection error occurred ", arguments )
+    })
   
 });

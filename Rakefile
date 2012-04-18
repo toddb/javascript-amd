@@ -111,3 +111,13 @@ namespace "release" do
     FileUtils.mkdir_p %w(release)
   end
 end
+
+namespace "server" do
+
+  node = /mswin|mingw/ =~ RUBY_PLATFORM ? 'node.exe' : 'node'
+
+  desc "Starts test server on localhost:8888"
+  task :start do
+    `#{node} src/scripts/server/coffee.js 8888`
+  end
+end
