@@ -76,6 +76,11 @@ namespace :test do
   task :node => ['build:compile'] do
      `lib/node-jasmine-dom/bin/jasmine-dom --runner test/SpecRunner.html`
   end
+  
+  desc "Run the example against the server"
+  task :server do
+    `#{open} http://localhost:8888/orders/current`
+  end
 end
 
 desc "Build and release to server using upload.sh - (not checked in)"
