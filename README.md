@@ -12,19 +12,18 @@ It also demonstrates different types of testing: testing plain html, events and 
 
 ## FEATURES/PROBLEMS:
 
-* to run tests and src/app.html you first need to build so that html is wrapped
+* to run tests and src/app.html you first need to build so that html is wrapped when not running via webserver
 
 ## TODO:
 
-* setup node.js as out-of-process localhost for serving up html files
-* write this app using a REST style
+* complete cakefile port of rake
+* [Done] <del>setup node.js as out-of-process localhost for serving up html files</del>
+* [Done] <del>write this app using a REST style</del>
 
 ## SYNOPSIS:
 
-
 Use rake to see all tasks. Key tasks are build, test:acceptance and test:specs
 
-<pre>
 	$ rake -T
 	rake all              # Build and release
 	rake build            # Create the release [default]
@@ -40,28 +39,70 @@ Use rake to see all tasks. Key tasks are build, test:acceptance and test:specs
 	rake test:example     # Show example
 	rake test:node        # Run spec tests in node.js
 	rake test:specs       # Run spec tests in browser
-</pre>
 
-== REQUIREMENTS:
+## REQUIREMENTS:
 
 The app uses 
 
 * ruby (currently using 1.8.7)
 * rake (currently 0.8.7)
-* node.js (currently 0.5.0)
+* node.js (currently 0.6.15)
+* npm
+* coffee-script
+* python (currently 2.6.1)
+* Pygments (currently 1.5)
+* docco
 
 Tested on Max OSX with Mozilla 8 and Chrome 17.
 
+## ENVIRONMENT SETUP
+
+Install node which should come with Node Package Manager
+
+	$ node --version
+	v0.6.15
+	$ npm --version
+	1.1.16
+
+Install coffee script (as root for global install and this ensure symlinks are setup)
+
+	# npm -g install coffee-script
+	$ coffee --version
+	CoffeeScript version 1.3.1
+
+Installing the ability to generate documentation:
+
+	# npm install docco -g
+	
+Installing Pygaments:
+
+From the tarball release
+
+* Download the most recent tarball from the download page (https://bitbucket.org/birkenfeld/pygments-main/downloads)
+* Unpack the tarball
+* <code>sudo python setup.py install</code>
+
+Note that the last command will automatically download and install setuptools if you don't already have it installed. This requires a working internet connection. This will install Pygments into your Python installation's site-packages directory.
+
+	$ pygmentize -V
+	Pygments version 1.5, (c) 2006-2011 by Georg Brandl.
+
 ## BUILDING
 
-<pre>$ rake build</pre>
+In rake:
+
+	$ rake build
+
+In cake:
+
+	$ cake build
 
 ## RELEASING
 
 * create an upload.sh file that will release to your environment
 * all release files in dist/
 
-<pre>$ rake release</pre>
+	$ rake release
 
 ## LICENSE:
 

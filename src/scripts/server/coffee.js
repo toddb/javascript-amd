@@ -1,9 +1,9 @@
 var port = process.argv[2] || 8888;
 
-var base = require('../../../lib/node-rest-router')
+var router = require('../../../lib/node-rest-router')
      
 // Load the node-router library by creationix
-var server = base.getServer({ 
+var server = router.getServer({ 
   basePath: 'src/scripts/server/'
 });
 
@@ -20,8 +20,8 @@ server.get("/orders/.*", 'application/json', function (req, res) {
   res.json(200, "orders/1.json");
 });
 
-server.get("/orders/.*", "*", base.staticDirHandler('./src',   '/orders') )
-server.get("/build/.*", "*",  base.staticDirHandler('./build', '/build') )
+server.get("/orders/.*", "*", router.staticDirHandler('./src',   '/orders') )
+server.get("/build/.*", "*",  router.staticDirHandler('./build', '/build') )
 
 // Listen on port on localhost
 server.listen(parseInt(port, 10), "localhost");

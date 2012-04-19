@@ -1,6 +1,7 @@
 require 'rubygems' unless ENV['NO_RUBYGEMS']
-
 require 'fileutils'
+open = /mswin|mingw/ =~ RUBY_PLATFORM ? 'start' : 'open'
+
 
 task :default => [:build]
 
@@ -11,7 +12,7 @@ desc "Build and release"
 task :all => [:clobber, :build, :release]
 
 desc "Removes all files from build and release"
-task :clobber => ["build:clean", "release:clean"]
+task :clobber => ["build:clean", "release:clean", "docs:clean"]
 
 namespace :build do
   desc "Removes files from dist and build"
@@ -54,9 +55,7 @@ desc "Opens all tests and examples in browser"
 task :test => ["test:acceptance", "test:specs", "test:example"]
 
 namespace :test do
-  
-  open = /mswin|mingw/ =~ RUBY_PLATFORM ? 'start' : 'open'
-  
+    
   desc "Run acceptance test in browser"
   task :acceptance => "build:compile" do
     `#{open} dist/app.html`
@@ -126,3 +125,21 @@ namespace "server" do
     `#{node} src/scripts/server/coffee.js 8888`
   end
 end
+
+namespace :docs do 
+  desc "Create the documentation set"
+  task :compile do
+    `docco src/scripts/*.js src/scripts/coffee/*.js src/scripts/rest-coffee/*.js src/scripts/utils/*.js`
+  end
+  
+  "Clean the documentation set"
+  task :clean do
+    FileUtils.rm_r Dir.glob('docs') rescue nil    
+  end
+  
+  desc "Opens the documentation in a browser"
+  task :open do
+    `#{open} docs/bootstrap.html`
+  end
+end
+
