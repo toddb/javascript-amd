@@ -1,13 +1,10 @@
-/* 
- * thin wrapper around $.ajax that specifically manages the Accept header
- */
+// thin wrapper around `$.ajax` that specifically manages the `Accept` header
 define(
     'utils/httpCall',
     ['utils/log', 'jquery', 'underscore'],
     function (log, $, _) {
  
-        function ajax(verb, url, accept, data, dataType) {
-            
+        function ajax(verb, url, accept, data, dataType) {        
             return $.ajax({
                 type: verb,
                 url: url,
@@ -24,7 +21,9 @@ define(
                         log.debug('HTTP %s of "%s" failed ( %s ), and no error handler was defined', verb, url, message);
                 })
         }
-
+        
+        //  Public interface methods
+        //  ------------------------
         function ajaxGet(uri, mediaType) {
             return ajax('GET', uri, mediaType, null, null);
         }
@@ -41,10 +40,12 @@ define(
             return ajax('DELETE', uri, null, null, null, null);
         }
 
-        //
-        // Return a static object (i.e. this is a utility class)
-        //
+        // 'Static' object with functions.
         return {
+            // Http verbs (`get`, `put`, `post`, `delete`).
+            //
+            // **WARNING**: `delete` is a reserved identifer in javascript. The delete
+            // method can be called if it is used as an array name.
             get: ajaxGet,
             put: ajaxPut,
             post: ajaxPost,

@@ -8,7 +8,6 @@ var server = router.getServer({
 });
 
 // Configure our HTTP server to respond
-
 server.get("/orders/current", 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8', function(req, res){
   res.html(200, "../../app-rest.html")
 } )

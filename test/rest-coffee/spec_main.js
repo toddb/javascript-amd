@@ -13,7 +13,7 @@ describe("Loading rest coffee", function() {
     })
   });
   
-  describe("description", function() {
+  describe("GET coffee and orders", function() {
     
     beforeEach( _requires(['rest-coffee/main']));
     

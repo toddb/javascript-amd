@@ -1,9 +1,10 @@
 //  A utility class for manipulating a list of links that form a semantic interface
 //  to a resource.
 //
-//  example data, of an object with a array called links:
-//
-// {
+//  Example data, of an object with a array called links:
+//  
+//  <code>
+//  {
 //   links: [
 //     { rel: "alternate", type: "text/html", href: "http://localhost/orders/index" },
 //     { rel: "collection" type: "application/json", href: "http://localhost/orders/current" },
@@ -13,8 +14,9 @@
 //     { rel: "item", type: "application/json", href: "http://localhost/orders/2"},
 //     { rel: "item", type: "application/json", href: "http://localhost/orders/3"},
 //     { rel: "last", type: "application/json", href: "http://localhost/orders/3"},
-//   ]
-// }
+//    ]
+//  }
+//  </code>
 //
 //  Parameters
 //  ==========
@@ -27,32 +29,32 @@
 //  This is the first parameter to most methods on this object. It
 //  is an object with some form of semantic interface, that contains
 //  links. The supported forms of this parameter are:
-//     - the <head> element of a html DOM
-//     - the magic identifer 'HEAD' (as a synonym for the <head> element)
-//     - an array of link objects with rel, type and href values
-//     - an object with a 'links' object which an array of link objects
+//  - the `<head>` element of a html DOM
+//  - the magic identifer `HEAD` (as a synonym for the <head> element)
+//  - an array of link objects with `rel`, `type` and `href` values
+//  - an object with a `links` object which an array of link objects
 //
 //  relationshipType
 //  ----------------
 //  
 //  This parameter is a well known (or custom) relationship type. 
-//  e.g 'canonical', 'alternate', 'up', 'self'
+//  e.g `canonical`, `alternate`, `up`, `self`
 //
 //  The relation stype can be:
-//    - an exact matching string
-//    - a magic wildcard string '*'
-//    - a regular expression
+//  - an exact matching string
+//  - a magic wildcard string `*`
+//  - a regular expression
 //
 //  mediaType
 //  ---------
 //
-//  This paramter is a well known mime type. e.g. 'application/json',
-//  'text/html' etc.
+//  This paramter is a well known mime type. e.g. `application/json`,
+//  `text/html` etc.
 //
 //  The relation stype can be:
-//    - an exact matching string
-//    - a magic wildcard string '*'
-//    - a regular expression
+//  - an exact matching string
+//  - a magic wildcard string `*`
+//  - a regular expression
 //
 
 define(
@@ -72,11 +74,8 @@ define(
             }
         }
 
-
-        //
         // Map the list of child <link> elements from the given DOM element
         // into simple link objects
-        //
         function filterDom(element, relationshipType, mediaType) {
             var links = $(element)
                 .find('link')
@@ -90,27 +89,24 @@ define(
             if (!_.isUndefined(representation) && _.contains(_.keys(representation), 'links')) {
                 return filterLinks(representation['links'], relationshipType, mediaType);
             }
-            return []; // No links member on the object, so nothing matches
+            // No links member on the object, so nothing matches
+            return [];
         }
 
         // A utility helper function to match a relationship type of media type string
         //
         // Match a link string if:
         //   a regular  expression is used
-        //   the string is a special case wildcard string of '*'
+        //   the string is a special case wildcard string of `*`
         //   the string matches the link string
-        //
         function matchParameter(linkString, matchString) {
             return (_.isRegExp(matchString) && linkString.match(matchString)) ||
                 matchString === '*' ||
                     linkString === matchString;
         }
 
-
-        //
         // Get an array of links that match the given relationship type and
         // media type, where the link has a href 
-        //
         function filterLinks(links, relationshipType, mediaType) {
             if (_.isArray(links)) {
                 return _.filter(links, function (link) {
@@ -158,11 +154,8 @@ define(
         }
 
 
-        //
-        //  HTTP/jqXHR utilities
-        //  =====================
-
-
+         //  HTTP/jqXHR utilities
+         //  =====================
          function ajaxLink(links, relationshipType, mediaType, verb, data, dataType) {
              var candidateLinks = filter(links, relationshipType, mediaType);
              if (!_.isEmpty(candidateLinks)) {
@@ -190,10 +183,8 @@ define(
          }
 
 
-         //
          //  Public interface methods
          //  ========================
-         //
 
 
          function ajaxGet(links, relationshipType, mediaType) {
@@ -238,7 +229,7 @@ define(
             //
             // Http verbs (get, put post, delete).
             //
-            // WARNING: 'delete' is a reserved identifer in javascript. The delete
+            // WARNING: `delete` is a reserved identifer in javascript. The delete
             // method can be called if it is used as an array name.
             get: ajaxGet,
             put: ajaxPut,
@@ -258,7 +249,6 @@ define(
             //
             // The results are not sorted. When multiple link entries are matched
             // then the order should not be assumed.
-            //
             filter: filter
         };
     });
