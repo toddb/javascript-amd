@@ -129,7 +129,7 @@ end
 namespace :docs do 
   desc "Create the documentation set"
   task :compile do
-    `docco src/scripts/*.js src/scripts/coffee/*.js src/scripts/rest-coffee/*.js src/scripts/utils/*.js`
+    `docco src/scripts/*.js src/scripts/coffee/*.js src/scripts/rest-coffee/*.js src/scripts/utils/*.js test/spec* test/*/spec*`
   end
   
   "Clean the documentation set"
