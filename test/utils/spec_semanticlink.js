@@ -28,26 +28,11 @@ describe("Semantic link", function() {
        
   });
   
-  xdescribe("GET", function() {
+  describe("GET", function() {
 
      beforeEach(function() {
        $('<link rel="collection" type="text/html" href="http://semanticlink-test">').prependTo('HEAD')
      
-     });
-
-     xit("should get", function() {
-       spyOn($, 'ajax')
-       
-       link.get('HEAD', 'collection', 'text/html')
-       
-       expect($.ajax).wasCalledWith({ 
-         type : 'GET', 
-         url : 'http://semanticlink-test/', 
-         data : null, 
-         dataType : null,
-         contentType : 'text/html',
-         beforeSend : jasmine.any(Function) });
-         
      });
 
      it("should trigger failure callback", function() {
@@ -55,7 +40,8 @@ describe("Semantic link", function() {
        
        $.mockjax({
          url: '*',
-         headers: { Accept: 'text/html'}
+         headers: { Accept: 'text/html'},
+         status: 500
        });
        
        link
@@ -65,12 +51,14 @@ describe("Semantic link", function() {
         waitsFor(function() {
           return onFailure.wasCalled;
         });
-        
-        $.mockjaxClear()
+ 
      });
 
      afterEach(function() {
-       $('link[rel="collection"]').remove()
+       runs(function(){
+        $.mockjaxClear()         
+        $('link[rel="collection"]').remove()
+       })
      });
 
    });

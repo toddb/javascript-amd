@@ -18,20 +18,23 @@ define(
                   } 
                 })
                 .fail(function (jqXhr, status, message) {
-                        log.debug('HTTP %s of "%s" failed ( %s ), and no error handler was defined', verb, url, message);
+                        log.debug('HTTP %s of "%s" failed ( %s ), and no error handler was defined', verb, url, message || "");
                 })
         }
         
         //  Public interface methods
         //  ------------------------
+        // **note:** mediaType is the mime-type (eg applicaton/json )
         function ajaxGet(uri, mediaType) {
             return ajax('GET', uri, mediaType, null, null);
         }
-
+        
+        // **note:** dataType is jQuery defined dataTypes (ie text, json, xml)
         function ajaxPut(uri, data, dataType) {
             return ajax('PUT', uri, null, data, dataType);
         }
 
+        // **note:** dataType is jQuery defined dataTypes (ie text, json, xml)
         function ajaxPost(uri, data, dataType) {
             return ajax('POST', uri, null, data, dataType);
         }

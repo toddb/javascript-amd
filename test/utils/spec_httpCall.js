@@ -7,7 +7,81 @@ describe("Http Call", function() {
     onFailure = jasmine.createSpy();
     onSuccess = jasmine.createSpy();
   }));
+  
+  describe("POST failure", function() {
+    
+    it("should trigger failure callback", function() {
+      $.mockjax({
+        url: '*',
+        type: 'POST',
+        status: 500
+      });      
+    });
+    
+    it("should trigger failure callback with url not found", function() {
+        $.mockjax({
+          url: 'http://not-found',
+          type: 'POST',
+        });
+    });
 
+    it("should trigger failure callback with url not found because the server returned 404", function() {
+        $.mockjax({
+          url: 'http://httpCall-POSTtest',
+          type: 'POST',
+          status: 404
+        });
+    });
+        
+    afterEach(function() {
+       // note: using dataType correctly from jQuery
+       httpCall
+        .post('http://httpCall-POSTtest', {}, 'json')
+        .fail( onFailure )
+        .done( onSuccess )
+
+       waitsFor(function() {
+         return onFailure.wasCalled;
+       });
+       
+       runs(function(){
+         expect(onSuccess).not.wasCalled();
+         $.mockjaxClear();          
+       })
+    })
+    
+  });
+
+
+  describe("POST success", function() {
+
+    it("should trigger success callback", function() {
+       $.mockjax({
+         url: 'http://httpCall-POSTtest',
+         type: 'POST',
+         responseText: { me: "this"},
+         async: false
+       });
+    });
+    
+    afterEach(function() {
+      httpCall
+       .post('http://httpCall-POSTtest', {}, 'json')
+       .fail( onFailure )
+       .done( onSuccess )
+
+       waitsFor(function() {
+         return onSuccess.wasCalled;
+       });
+
+       runs(function(){
+         expect(onFailure).not.wasCalled();         
+         $.mockjaxClear();          
+       })
+  
+    });
+
+  });
   
   describe("GET failure", function() {
 
@@ -24,14 +98,14 @@ describe("Http Call", function() {
         });
      });
      
-     xit("should trigger failure callback with accept not found", function() {
+     it("should trigger failure callback with accept not found", function() {
         $.mockjax({
           url: '*',
           headers: { "Accept": 'application/json' }
         });
      });
      
-     xit("should trigger failure callback with accept not found on response", function() {
+     it("should trigger failure callback with accept not found on response", function() {
         $.mockjax({
           url: '*',
           response: function( settings ){

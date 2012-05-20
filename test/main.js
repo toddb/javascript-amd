@@ -32,7 +32,7 @@ require({
       $(function(){
 
               $.mockjaxSettings = {
-                log:           log,
+                log:           log.debug,
                 status:        200,
                 responseTime:  20,
                 isTimeout:     false,
@@ -43,6 +43,7 @@ require({
                 proxy:         '',
                 lastModified:  null,
                 etag:          '',
+                useAjax:       false, 
               };
               
               // add a div element to attach tests

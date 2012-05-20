@@ -19,8 +19,8 @@ define('utils/log', function(){
       console.log( "loading: %s", obj )
     },
     
-    error: function( obj ){
-      console.error.apply( console, arguments )
+    error: function(){
+      console.log.apply( console, arguments )
     }
   }
   

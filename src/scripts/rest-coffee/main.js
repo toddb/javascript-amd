@@ -39,14 +39,14 @@ define('rest-coffee/main',
               })
             })
             .fail( function( jqXhr, status, message ){
-              log.error( "Items error occured ", arguments)
+              log.error( "Items error occured: %s - %s", status, message)
             })
           })
         })
 
     })
     .fail( function( jqXhr, status, message ){
-       log.error( "HEAD collection error occurred ", arguments )
+       log.error( "HEAD collection error occurred: %s - %s", status, message )
     })
   
 });
