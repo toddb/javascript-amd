@@ -2,6 +2,7 @@
   "links": [
     { "rel": "alternate", "type": "text/html", "href": "http://localhost:8888/orders/index" },
     { "rel": "self", "type": "application/json", "href": "http://localhost:8888/orders/current" },
+    { "rel": "collection", "type": "application/json", "href": "http://localhost:8888/orders" },
     { "rel": "first", "type": "application/json", "href": "http://localhost:8888/orders/1"},
     { "rel": "next", "type": "application/json", "href": "http://localhost:8888/orders/1"},
     { "rel": "last", "type": "application/json", "href": "http://localhost:8888/orders/3"}

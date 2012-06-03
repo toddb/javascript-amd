@@ -2,6 +2,8 @@ describe("Loading rest coffee", function() {
   
   beforeEach(function(){ 
     $('<link rel="collection" type="application/json" href="http://localhost:8888/orders/current">').prependTo('HEAD') 
+
+    // response for the collection
     $.mockjax({
       url: '*/orders/current',
       type: 'GET',
@@ -20,25 +22,69 @@ describe("Loading rest coffee", function() {
       responseText: require('json!server/orders/1.json')
     })
 
+    // match on the url from the collection http://localhost:8888/orders
+    $.mockjax({
+      url: '*/orders',
+      type: 'POST',
+      responseText: require('json!server/orders/1.json'),
+       // and return Location header http://localhost:8888/orders/4 of the created resource
+      headers: {'Location': 'http://localhost:8888/orders/4' },
+      async: false
+    });
+    
   });
   
-  describe("GET coffee and orders", function() {
+  describe("Loading and displaying current orders", function() {
     
-    beforeEach( _requires(['rest-coffee/main']));
+    var orders, original_orders
     
-    it("should start by loading the link", function() {
+    beforeEach( _requires(['rest-coffee/main']) );
+    
+    describe("Load up and click to enter new", function() {
       
-       waitsFor( function(){
-         return $('li').size() > 0
-       })
-       
-       runs(function(){
-         var val = $('li').size();
-         $('button.order').click()
-         expect($('li').size()).toEqual(val + 1);        
-       })
+      beforeEach(function() {
 
-     });
+         waitsFor( function(){
+           orders = $('li').size()
+           return orders == 3
+         })
+
+         runs(function(){
+           original_orders = $('li').size();  
+           // click the button
+           $('button.order').click() 
+           // and the new order is displayed
+           expect($('#new-coffee').is(':visible')).toBeTruthy();   
+           // with no new orders added
+           expect($('li').size()).toEqual(original_orders);
+        })
+        
+        
+      });
+      
+      it("Add new", function() {
+        // select a new order
+        $( 'input', $('#new-coffee')).val('small')         
+        // submit
+        $( 'form', $('#new-coffee')).submit()
+
+        waitsFor( function(){
+          // new order is added 
+          return $('li').size() == orders + 1
+        })
+
+        runs(function(){
+          console.log($('li'))
+          // and we've hidden the form
+          expect($('#new-coffee').is(':visible')).toBeFalsy();         
+          // and added the order
+          expect($('li').size()).toEqual(original_orders+1);        
+        })
+
+      });
+      
+    });
+
   });
 
   afterEach(function() {

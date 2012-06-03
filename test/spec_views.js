@@ -37,4 +37,20 @@ describe("Html views", function() {
     });
   });
   
+  describe("Add item", function() {
+    beforeEach(_requires(["text!coffee/views/_new.html", 'jsrender'], function( text ){ 
+      $( "#test" ).html( $.templates( text ).render( [data] ) );
+    }));
+    
+    it("has a size item", function() {
+      var select = $("input[name='size']", "#test" )
+      expect(select.size()).toEqual(1);
+      expect(select.val()).toEqual("small");
+    });
+    
+    afterEach(function() {
+      $( "#test" ).empty()
+    });    
+  });
+  
 });

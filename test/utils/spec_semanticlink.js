@@ -31,8 +31,7 @@ describe("Semantic link", function() {
   describe("GET", function() {
 
      beforeEach(function() {
-       $('<link rel="collection" type="text/html" href="http://semanticlink-test">').prependTo('HEAD')
-     
+       $('<link rel="collection" type="text/html" href="http://semanticlink-test">').prependTo('HEAD')  
      });
 
      it("should trigger failure callback", function() {
@@ -93,6 +92,64 @@ describe("Semantic link", function() {
       expect(link.filter(links, /troughs/i, "*").length).toEqual(1);
       expect(link.filter(links, '*', /application/i).length).toEqual(5);
     });   
+  });
+  
+  describe("POST", function() {
+    
+    var resource
+
+    beforeEach(function() {
+      // a sample resouce with both the links and the json respresentation/payload
+      resource = {
+        "links": [
+          { "rel": "collection", "type": "application/json", "href": "http://localhost:8888/orders/current"},
+          { "rel": "self", "type": "application/json", "href": "http://localhost:8888/orders/1"},
+          { "rel": "edit", "type": "text/html", "href": "http://localhost:8888/orders/1"},
+        ],
+        "type": "small", 
+      }
+       
+    });
+    
+    it("should create on a collection", function() {
+     var onSuccess = jasmine.createSpy();
+     var onFailure = jasmine.createSpy();
+ 
+     // match on the url from the collection
+     $.mockjax({
+       url: 'http://localhost:8888/orders/current',
+       type: 'POST',
+       responseText: { me: "this"},
+       async: false
+     });
+ 
+ // we should POST on a collection. As such the collectin is the factory for the
+ // creation of new resources - not tested here but the POST should then return
+ // the Location of that created resource for a GET - but that is the functionality of the server
+ // and quite another set of tests that aren't worth simulating. Also, at this point, we are not
+ // mapping the json representation (self) from the html form representation (edit). Instead,
+ // I have just hand-coded the representation as { type: "small" }
+     link
+      .post(resource, 'collection', 'application/json', { type: "small" }, 'json')
+      .fail( onFailure )
+      .done( onSuccess )
+
+      waitsFor(function() {
+        return onSuccess.wasCalled;
+      });
+
+      runs(function(){
+        expect(onFailure).wasNotCalled();         
+      })
+
+    });
+
+    afterEach(function() {
+     runs(function(){
+      $.mockjaxClear()         
+     })
+    });
+    
   });
 
 });
