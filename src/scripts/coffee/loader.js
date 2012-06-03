@@ -44,7 +44,8 @@ define('coffee/loader', ['utils/log', 'jquery', 'jsrender', 'jsobservable', 'jsv
     this.renderChild( settings.orders.id, store ); 
     this.renderNewChild( settings.newOrder.id, settings.newOrder.types );
     
-    this.orderHandler( settings.newOrder.id, settings.add.click, function(){ formatDates( $( settings.orders.dates ) ) }  )
+    // TODO: there is no reason that orderHandler takes a queue/type of handlers for the promise
+    this.orderHandler( settings.newOrder.id, settings.add.click  )
     
     hideNew()
     $(settings.add.id).click( function(){
@@ -84,15 +85,14 @@ define('coffee/loader', ['utils/log', 'jquery', 'jsrender', 'jsobservable', 'jsv
     $(settings.newOrder.id).hide()
   }
   
-  function orderHandler( el, promise, success ){
+  function orderHandler( el, promise ){
     var that = this
     $('>form', el).submit( function(){
       
-      // TODO:  implement me
-      // transform the form object to json ready for submission     
-      var order = {} 
+       // TODO:  implement me
+       // transform the form object to json ready for submission     
+       var order = {} 
     
-      var result = $.Deferred()
         $.when( promise(order) )
          .done( function( order, statusText, jqXhrOk ){
            // a successful order will be added to the observable store
@@ -100,17 +100,13 @@ define('coffee/loader', ['utils/log', 'jquery', 'jsrender', 'jsobservable', 'jsv
            // this success should be refactored out because it is merely
            // a workaround to the problem of jQuery easydate - and makes the code confusing
            // if anything it goes into the promise
-           //success()
-           success()
+           formatDates( $( settings.orders.dates ) )
            hideNew()
- 
-           result.resolve( order ) 
-           return result.promise()
+
          })
          .fail( function( jqXhr, status, message ){
            // TODO: probably want to have some default implementation on re-submission
-           result.reject( order )   
-           return result.promise() 
+
          })
              
         // block the POST on the native form submission

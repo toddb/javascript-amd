@@ -8,15 +8,14 @@ describe("Events - add order", function() {
     
     $('<form id="handler">').appendTo('#test')
     spyOn(loader, 'add').andCallThrough()
-    var callback = jasmine.createSpy().andReturn( data );
-    var success = jasmine.createSpy();
-    loader.orderHandler( '#test', callback, success )
+    var promise = jasmine.createSpy().andReturn( data );
+
+    loader.orderHandler( '#test', promise )
     
     $('#handler').submit()
     
     expect(loader.add).toHaveBeenCalledWith( data )
-    expect(callback).toHaveBeenCalled()
-    expect(success).toHaveBeenCalled()
+    expect(promise).toHaveBeenCalled()
   });
     
   it("should save the order and update the view to the customer", function() {
