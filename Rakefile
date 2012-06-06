@@ -120,7 +120,7 @@ namespace "server" do
 
   node = /mswin|mingw/ =~ RUBY_PLATFORM ? 'node.exe' : 'node'
 
-  desc "Starts test server on localhost:8888"
+  desc "Starts test server on localhost:8888 - note: stdout is swallowed by rake - use cake"
   task :start do
     `#{node} src/scripts/server/coffee.js 8888`
   end

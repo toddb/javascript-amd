@@ -4,7 +4,8 @@ var router = require('../../../lib/node-rest-router')
      
 // Load the node-router library by creationix
 var server = router.getServer({ 
-  basePath: 'src/scripts/server/'
+  basePath: 'src/scripts/server/',
+  logger: console.log
 });
 
 // Configure our HTTP server to respond
@@ -21,6 +22,10 @@ server.get("/orders/.*", 'application/json', function (req, res) {
 
 server.get("/orders/.*", "*", router.staticDirHandler('./src',   '/orders') )
 server.get("/build/.*", "*",  router.staticDirHandler('./build', '/build') )
+
+server.post("/orders", '*', function(req, res){
+  res.created( '/orders/1.json' )
+})
 
 // Listen on port on localhost
 server.listen(parseInt(port, 10), "localhost");
