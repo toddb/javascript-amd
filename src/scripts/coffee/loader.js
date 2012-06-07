@@ -5,6 +5,8 @@ define('coffee/loader', ['utils/log', 'jquery', 'jsrender', 'jsobservable', 'jsv
   // TODO: store shouldn't be a singleton - need one per instance
   var store = [],
     // these defaults should really be exposed publically so that I can query and reuse them in tests
+    // Actually, I would expose them similarly to jQuery widgets through the one call
+    // in fact, I should expose and allow events
     defaults = {
       appendTo: 'body',
       instructions: {
@@ -15,11 +17,12 @@ define('coffee/loader', ['utils/log', 'jquery', 'jsrender', 'jsobservable', 'jsv
         id: '#coffee-orders',
         tmpl: '',
         dates: '.date',
+        // initialise with a default empty list
         items: []
       },
       newOrder: {
         id: '#new-coffee',
-        tmpl: require('text!coffee/views/_new.html'),
+        tmpl: '',
         types: [{type:'small'}]
       },
       add: {
@@ -32,6 +35,8 @@ define('coffee/loader', ['utils/log', 'jquery', 'jsrender', 'jsobservable', 'jsv
   function init( opts ){
          
     settings = $.extend(true, {}, defaults, opts);
+    
+    //store should really be empty and then come back re-render the GET
     store = settings.orders.items
     
     if (settings.appendTo != ''){
@@ -73,6 +78,7 @@ define('coffee/loader', ['utils/log', 'jquery', 'jsrender', 'jsobservable', 'jsv
     $(el).append( $.templates.parent.render( data ) )       
   }
   function renderChild( el, data ){
+    // BUG: this errors at times from load order -- errors first on jsviews-1.0pre.js:23
     $.link.child( el, data );       
   }  
   function renderNewChild( el, data ){

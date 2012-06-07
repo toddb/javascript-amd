@@ -1,4 +1,10 @@
-define("coffee/main", ['utils/log', 'jquery', 'coffee/loader'], function( log, $, loader ){
+define("coffee/main", 
+['utils/log', 'jquery', 'coffee/loader',
+'text!coffee/views/index.html',
+'text!coffee/views/_item.html',
+'text!coffee/views/_new.html'
+], 
+function( log, $, loader, index, item_, new_ ){
   
   log.loader("coffee/main")
     
@@ -6,11 +12,14 @@ define("coffee/main", ['utils/log', 'jquery', 'coffee/loader'], function( log, $
     
     loader.init({
       instructions: {
-        tmpl: require('text!coffee/views/index.html')
+        tmpl: index
       },
       orders: {
-        tmpl: require('text!coffee/views/_item.html'),
+        tmpl: item_,
         items: fakeGet()
+      },
+      newOrder: {
+        tmpl: new_
       },
       add: {
         click: fakeAjaxSet
