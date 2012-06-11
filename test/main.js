@@ -10,9 +10,11 @@ require({
       jsobservable: 'lib/jsviews/jsobservable-1.0pre',
       jsviews:      'lib/jsviews/jsviews-1.0pre',
 
-      jquery:     'lib/jquery/jquery-1.7.1',
-      underscore: 'lib/utils/underscore-1.2.3',
-      date:       'lib/utils/easydate-0.2.4',
+      jquery:      'lib/jquery/jquery-1.7.1',
+      'ui-core':   'lib/jquery-ui/jquery.ui.core',
+      'ui-widget': 'lib/jquery-ui/jquery.ui.widget',
+      underscore:  'lib/utils/underscore-1.2.3',
+      date:        'lib/utils/easydate-0.2.4',
       
       "jasmine": '../../lib/jasmine/jasmine',
       "jasmine-html": '../../lib/jasmine/jasmine-html',

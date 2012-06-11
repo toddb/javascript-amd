@@ -2,7 +2,8 @@ define("coffee/main",
 ['utils/log', 'jquery', 'coffee/loader',
 'text!coffee/views/index.html',
 'text!coffee/views/_item.html',
-'text!coffee/views/_new.html'
+'text!coffee/views/_new.html',
+'coffee/ui'
 ], 
 function( log, $, loader, index, item_, new_ ){
   

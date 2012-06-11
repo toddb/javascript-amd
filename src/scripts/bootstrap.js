@@ -21,6 +21,8 @@ require(
         'utils/log',
         'requirejs',
         'jquery',
+        'ui-core',
+        'ui-widget',
         'order',
         'text',
         'jsrender',

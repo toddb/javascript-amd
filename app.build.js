@@ -28,9 +28,11 @@
       jsobservable: 'lib/jsviews/jsobservable-1.0pre',
       jsviews:      'lib/jsviews/jsviews-1.0pre',
  
-      jquery:     'lib/jquery/jquery-1.7.1',
-      underscore: 'lib/utils/underscore-1.2.3',
-      date:       'lib/utils/easydate-0.2.4',
+      jquery:      'lib/jquery/jquery-1.7.1',
+      'ui-core':   'lib/jquery-ui/jquery.ui.core',
+      'ui-widget': 'lib/jquery-ui/jquery.ui.widget',
+      underscore:  'lib/utils/underscore-1.2.3',
+      date:        'lib/utils/easydate-0.2.4',
       
     },
     
@@ -49,11 +51,11 @@
         },
         {
           name: "coffee/main",
-          exclude: [ 'jquery', 'utils/log', 'text', 'jsrender', 'text!coffee/views/_item.html', 'text!coffee/views/index.html']
+          exclude: [ 'jquery', 'utils/log', 'text', 'jsrender', 'jsobservable', 'date', 'jsviews', 'ui-core', 'ui-widget', 'text!coffee/views/_item.html', 'text!coffee/views/index.html', 'text!coffee/views/_new.html']
         },
         {
           name: 'rest-coffee/main',
-          exclude: [ 'jquery', 'utils/log', 'text', 'jsrender', 'underscore']
+          exclude: [ 'jquery', 'utils/log', 'text', 'jsrender', 'jsobservable', 'jsviews', 'date', 'ui-core', 'ui-widget', 'text!coffee/views/_item.html', 'text!coffee/views/index.html', 'text!coffee/views/_new.html']
         },
         {
           name: 'bootstrap-html',
