@@ -22,10 +22,10 @@ describe("ui, templates - render & link", function() {
     link = {
       orders: {
         tmpl: "<li>{{:val}}</li>",
-        data: { val: 'me' },
         id: '#instructionslist'
       }      
-    }
+    },
+    order = { val: 'me' }
   
   it("should render instructions with the list wrapper", function() {
      el = $('#test').teller( { render: render });
@@ -39,8 +39,10 @@ describe("ui, templates - render & link", function() {
 
   });
   
-  it("should link list to instructions", function() {
+  it("should render linked list", function() {
     el = $('#test').teller( { render: render, link: link } );
+    // now add order
+    el.teller('addOrder', order)
     expect($('#instructionslist>li', el).size()).toEqual(1);    
   });
   
@@ -48,6 +50,8 @@ describe("ui, templates - render & link", function() {
   it("should link list to instructions via options", function() {
     el = $('#test').teller( { render: render } );
     el.teller('option', 'link', link)
+    // now add order
+    el.teller('addOrder', order)
     expect($('#instructionslist>li', el).size()).toEqual(1);    
     
     expect(el.teller('option', 'link')).toEqual(link, '.teller("option", "buttons") getter');
@@ -97,6 +101,40 @@ describe("ui, buttons", function() {
       
       el.teller('destroy')
     });
+
+});
+
+describe("methods, order", function() {
+  
+  it("should add an order to the store", function() {
+    // load up and callback after create
+    var create = jasmine.createSpy();
+    el.teller({create: function(ev,ui){
+      create()
+    }})
+    expect(create).toHaveBeenCalled();
+    expect(el.teller('option', 'orders')).toEqual([], "orders should be empty");
     
+    // also check that the orderAdded callback is performed
+    var ok = jasmine.createSpy();
+    el.teller()
+    el.teller('option', "added", function(ev,val){
+      ok() // here we could put our dateFormatter
+    })
+    el.teller('addOrder', { me: 'val' })
+    expect(el.teller('option', 'orders')).toEqual([{ me: 'val' }], 'orders should now have one added'); 
+    expect(ok).toHaveBeenCalled();
+    
+    var stopped = jasmine.createSpy()
+    el.teller('option', 'removed', function(){
+      stopped()
+    })
+    
+    el.teller('removeOrder', 1)
+    expect(el.teller('option', 'orders')).toEqual([], 'orders should now be empty again'); 
+    expect(stopped).toHaveBeenCalled();
+    
+  });
+  
   
 });

@@ -12,53 +12,57 @@ define('coffee/ui', ['utils/log', 'jquery', 'underscore', 'widget', 'jsrender', 
 
         // Options to be used as defaults
         options: {}, 
-
-        // Set up widget (e.g. create element, apply theming,
-        // bind events, etc.)
-        _create: function () {
-
-            // _create will automatically run the first time
-            // this widget is called. Put the initial widget
-            // set-up code here, then you can access the element
-            // on which the widget was called via this.element.
-            // The options defined above can be accessed via
-            // this.options
-            this._loadTemplates( _.extend({}, this.options.render, this.options.link) );
-            this._renderTemplates( this.options.render );
-            this._linkTemplates( this.options.link );
-		        this._createButtons( this.options.buttons );
-		        
+        
+        // called with createWidget
+        _getCreateOptions: function(){
+          // TODO: do something to create non-singleton store
+          return { store: [] }
         },
 
-        // Destroy an instantiated plugin and clean up modifications
-        // that the widget has made to the DOM
+        // Set up widget (e.g. create element, apply theming, bind events, etc.)
+        // _create and _init will automatically run the first time & _init thereafter
+        // there are number of callbacks - it is worth looking in jquery.ui.widget
+        _create: function () {
+            this.options.orders = this.options.store;
+            this._loadTemplates( _.extend({}, this.options.render, this.options.link) );
+            this._renderTemplates( this.options.render );
+            this._linkTemplates( this.options.link, this.options.orders );
+		        this._createButtons( this.options.buttons );
+       },
+
+        // Destroy an instantiated plugin and clean up modifications that the widget has made to the DOM
         _destroy: function () {
             $(this.element[0]).empty()
         },
+        
+        /* Custom Methods */
+        
+        addOrder: function( val ){
+          // default add on end
+          $.observable(this.options.orders).insert( this.options.orders.length, val);
+          this._trigger( "added", this, val )
+        },
+        
+        removeOrder: function( index, numToRemove ){
+          // adjust for zero-based index
+          var removed = $.observable(this.options.orders).remove( index - 1, numToRemove || 1)
+          this._trigger( 'removed', this, removed )
+        },
 
-        // methodB: function ( event ) {
-        //     // _trigger dispatches callbacks the plugin user can
-        //     // subscribe to
-        //     //signature: _trigger( "callbackName" , [eventObject],
-        //     // [uiObject] )
-        //     this._trigger('methodA', event, {
-        //         key: value
-        //     });
-        // },
-        // 
-        // methodA: function ( event ) {
-        //     this._trigger('dataChanged', event, {
-        //         key: value
-        //     });
-        // },
-
+        refresh: function( orders ){
+          $.observable(this.options.orders).refresh( index, numToRemove || 1)
+          this._trigger( 'refreshed', this, id )         
+        },
+        
+        /* Public options */
+        
         // Respond to any changes the user makes to the option method
         _setOption: function ( key, value ) {
             switch (key) {
               case "link":
                  this.options[key] = _.extend({}, this.options[key], value)
                  this._loadTemplates( value )
-                 this._linkTemplates( value )
+                 this._linkTemplates( value, this.options.orders )
                  break;
               case "render":
                  this.options[key] = _.extend({}, this.options[key], value)
@@ -73,21 +77,20 @@ define('coffee/ui', ['utils/log', 'jquery', 'underscore', 'widget', 'jsrender', 
             this._super( "_setOption", key, this.options[key] );
         },
         
+        /* Private methods */
+        
         _createButtons: function( buttons ) {
       		var that = this
        		  
     			_.each( buttons, function( props, name ) {
     				props = $.isFunction( props ) ? { click: props, text: name } : props;
-    				$(that.element[0]).find(':contains(' + name + ')')
+    				var btn = $(':contains(' + name + '),:submit[value=' + name +  ']', that.element[0])
+    				btn
     					.attr( props, true )
     					.unbind( "click" )
     					.click(function() {
     						props.click.apply( that.element[0], arguments );
     					})
-    				// we could make this a jQuery button if available, hhmmmm
-            if ( $.fn.button ) {
-             button.button();
-            }
     			});
  
       	},
@@ -101,12 +104,12 @@ define('coffee/ui', ['utils/log', 'jquery', 'underscore', 'widget', 'jsrender', 
   			  })
       	},
       	
-      	_linkTemplates: function( templates ){
+      	_linkTemplates: function( templates, store ){
       		var that = this     		      		  
    			  _.each(templates, function(render, name){
   			    // render onto given element or default to root widget element
-  		      log.debug("Linking template: %s on %s", name, render.id || that.element[0])
-    			  that._linkTemplate( render.id, name, render.data )    			    
+  		      log.debug("Linking template: %s on %s", name, render.id)
+    			  that._linkTemplate( render.id, name, store )    			    
   			  })
       	},
 
@@ -118,8 +121,8 @@ define('coffee/ui', ['utils/log', 'jquery', 'underscore', 'widget', 'jsrender', 
           })
       	},
       	     	
-      	_loadTemplate: function(){
-      	  $.templates.apply( null, arguments )
+      	_loadTemplate: function(name, tmpl){
+      	  $.templates( name, tmpl )
       	},
     
       	_renderTemplate: function(el, template, data){
@@ -127,8 +130,7 @@ define('coffee/ui', ['utils/log', 'jquery', 'underscore', 'widget', 'jsrender', 
       	},
       	
       	_linkTemplate: function(id, template, data){
-      	  // guard for id as #tag
-      	  $.link[template]( id, data ); 
+          $.link[template]( id, data );
       	}
     });
  

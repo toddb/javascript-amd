@@ -108,11 +108,9 @@ define('coffee/loader', ['utils/log', 'jquery', 'jsrender', 'jsobservable', 'jsv
            // if anything it goes into the promise
            formatDates( $( settings.orders.dates ) )
            hideNew()
-
          })
          .fail( function( jqXhr, status, message ){
            // TODO: probably want to have some default implementation on re-submission
-
          })
              
         // block the POST on the native form submission

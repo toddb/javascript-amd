@@ -1,34 +1,68 @@
 define('rest-coffee/main',
-  ['utils/log', 'jquery', 'underscore', 'utils/semanticLink', 'coffee/loader', 'utils/httpCall',
-  'text!coffee/views/index.html',
-  'text!coffee/views/_item.html',
-  'text!coffee/views/_new.html' ], 
-  function( log, $, _, link, loader, httpCall, index, item_, new_  ){
+  ['utils/log', 'jquery', 'underscore', 'utils/semanticLink', 'utils/httpCall', 'date', 'coffee/ui' ], 
+  function( log, $, _, link, httpCall){
   
   log.loader("rest-coffee/main")
+  
+  var orders, ordersRepresentation;
     
   $( function(){
-     var ordersRepresentation;
+      
+     orders = $('body').teller({
+       render: {
+         instructions: {
+           tmpl: require('text!coffee/views/index.html')
+         },
+         newOrder: {
+           tmpl: require('text!coffee/views/_new.html'),
+           id: "#new-coffee"
+         }
+       },
+       link: {
+         orders: {
+           tmpl: require('text!coffee/views/_item.html'),
+           id: "#coffee-orders"
+         }
+       },
+       create: function(){
+         $('#new-coffee').hide()         
+         getOrders()
+       },
+       added:  function(event, val){
+          $('.date').easydate();
+       },
+       buttons: {
+         New: function( event, ui ){
+           $('#new-coffee').show()
+         },
+         Submit: function( event, ui ){
+           
+           var order = {}
+           _.each($(event.toElement).siblings(), function(input){
+             order[input.name] = input.value
+           })
 
-     loader.init({
-      instructions: {
-        tmpl: index
-      },
-      orders: {
-        tmpl: item_
-      },
-      newOrder: {
-        tmpl: new_
-      },
-      add: {
-        click: addOrderPromise
-      },
+           $.when( addOrderPromise(order) )
+            .done( function( item, statusText, jqXhrOk ){
+              // a successful order will be added to the observable store
+              orders.teller('addOrder', item )
+            })
+            .progress(function(){
+              $('#new-coffee').hide()
+            })
+            .fail( function( jqXhr, status, message ){
+               $('#new-coffee').show()
+               // TODO: probably want to have some default implementation on re-submission
+            })          
+         }
+       }
      })
 
    })
-   
+    
   function addOrderPromise( order ){
      var result = new $.Deferred();
+     result.notify("Begin");
      link
          .post(ordersRepresentation, 'collection', '*', order, 'json')
          .done(function (content, status, settings) {
@@ -51,37 +85,34 @@ define('rest-coffee/main',
      return result.promise();   
   }
 
-  
-  // TODO: I think this actually should return a promise with the collection resource
-  // then we can actually get at it on with other resources - but maybe that 
-  // leaks through the layers too much and the loadder class shouldn't really
-  // know about the REST-based implementation?
-  link
-    .get('HEAD', 'collection', 'application/json')
-    .done( function( content, status, settings ){
-      
-        ordersRepresentation = content
+  function getOrders(){
+    link
+      .get('HEAD', 'collection', 'application/json')
+      .done( function( content, status, settings ){
 
-        $.when( _.map(content.orders, function( order ){
-          return httpCall.get( order.href, order.type )
-        }))
-        .done( function( data ){
-          _.each( data, function( entry ){
-            entry
-            .done( function( item, status, settings  ){
-              $( function(){
-                loader.add( item )
-              })
-            })
-            .fail( function( jqXhr, status, message ){
-              log.error( "Items error occured: %s - %s", status, message)
+          ordersRepresentation = content
+
+          $.when( _.map(content.orders, function( order ){
+            return httpCall.get( order.href, order.type )
+          }))
+          .done( function( data ){
+            _.each( data, function( entry ){
+              entry
+                .done( function( item, status, settings  ){
+                  orders.teller('addOrder', item )
+                })
+                .fail( function( jqXhr, status, message ){
+                  log.error( "Items error occured: %s - %s", status, message)
+                })
             })
           })
-        })
 
-    })
-    .fail( function( jqXhr, status, message ){
-       log.error( "HEAD collection error occurred: %s - %s", status, message )
-    })
+      })
+      .fail( function( jqXhr, status, message ){
+         log.error( "HEAD collection error occurred: %s - %s", status, message )
+      })
+  }
   
-});
+});    
+
+ 
