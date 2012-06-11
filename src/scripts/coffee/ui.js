@@ -7,40 +7,6 @@ define('coffee/ui', ['utils/log', 'jquery', 'underscore', 'widget', 'jsrender', 
 //- http://blog.nemikor.com/2010/05/15/building-stateful-jquery-plugins/
 //- https://github.com/shichuan/javascript-patterns/blob/master/jquery-plugin-patterns/ui-widget-requirejs-module.html
 
-    var DEFAULTS = {
-      buttons: 
-        [ {
-          text: 'Order New Coffee',
-          click: function() {}
-        },
-        {
-          text: 'Add',
-          id: '#coffee .order',
-          click: function() {}
-        }],
-      link: 
-        {
-          orders: {
-            tmpl: '',
-            data: [],
-            id: '#coffee-orders'
-          }
-        },
-      render: 
-        {
-          instructions: {
-            tmpl: '',
-            data: '',
-            id: '#coffee'
-          }, 
-          newOrder: {
-            tmpl: '',
-            data: [{type:'small'}],
-            id: '#new-coffee'
-          }
-        }
-    }
-
     // define your widget under the coffee namespace
     widget( "coffee.teller", { 
 
@@ -90,115 +56,70 @@ define('coffee/ui', ['utils/log', 'jquery', 'underscore', 'widget', 'jsrender', 
         _setOption: function ( key, value ) {
             switch (key) {
               case "link":
- 
-                  //this.options.someValue = doSomethingWith( value );
-                 // break;
+                 this.options[key] = _.extend({}, this.options[key], value)
+                 this._loadTemplates( value )
+                 this._linkTemplates( value )
+                 break;
               case "render":
-  
-               
-                  //this.options.someValue = doSomethingWith( value );
-                 // break;
+                 this.options[key] = _.extend({}, this.options[key], value)
+                 this._loadTemplates( value )
+                 this._renderTemplates( value )
+                 break;
             default:
-                //this.options[ key ] = value;
+                this.options[ key ] = value;
                 break;
             }
 
-            this._super( "_setOption", key, value );
+            this._super( "_setOption", key, this.options[key] );
         },
-
-        //somewhere assetHtml would be used for templating, depending
-        // on your choice.
         
         _createButtons: function( buttons ) {
-      		var that = this,
-      			hasButtons = false;
-
-      		if ( typeof buttons === "object" && buttons !== null ) {
-      			$.each( buttons, function() {
-      				return !(hasButtons = true);
-      			});
-      		}
-      		
-      		// loop through the buttons adding handlers and styling
-      		if ( hasButtons ) {
-      		  
-      			$.each( buttons, function( name, props ) {
-      				props = $.isFunction( props ) ?
-      					{ click: props, text: name } :
-      					props;
-      				$( "<button type='button'>" ).find(':contains(' + name + ')')
-      					.attr( props, true )
-      					.unbind( "click" )
-      					.click(function() {
-      						props.click.apply( that.element[0], arguments );
-      					})
-      				if ( $.fn.button ) {
-      					button.button();
-      				}
-      			});
-      		} 
+      		var that = this
+       		  
+    			_.each( buttons, function( props, name ) {
+    				props = $.isFunction( props ) ? { click: props, text: name } : props;
+    				$(that.element[0]).find(':contains(' + name + ')')
+    					.attr( props, true )
+    					.unbind( "click" )
+    					.click(function() {
+    						props.click.apply( that.element[0], arguments );
+    					})
+    				// we could make this a jQuery button if available, hhmmmm
+            if ( $.fn.button ) {
+             button.button();
+            }
+    			});
+ 
       	},
       	
       	_renderTemplates: function( templates ){
       		var that = this
-      		
-      		if ( that._hasValues(templates) ) {
-      		        		        		  
-      		  // now render or link for jsrender
-     			  _.each(templates, function(render, name){
-     			    log.debug("Rendering template: %s", name)
-    			    // render onto given element or default to root widget element
-      			  that._renderTemplate( render.id || that.element[0], name, render.data || {} )    			    
-    			  })
-       		  
-      		}     		
-      	  
+   			  _.each(templates, function(render, name){
+   			    log.debug("Rendering template: %s", name)
+  			    // render onto given element or default to root widget element
+    			  that._renderTemplate( render.id || that.element[0], name, render.data || {} )    			    
+  			  })
       	},
       	
       	_linkTemplates: function( templates ){
-      		var that = this
-      		
-      		if ( that._hasValues(templates) ) {
-      		  
-      		  // now render or link for jsrender
-     			  _.each(templates, function(render, name){
-    			    // render onto given element or default to root widget element
-    		      log.debug("Linking template: %s on %s", name, render.id || that.element[0])
-      			  that._linkTemplate( render.id, name, render.data )    			    
-    			  })
-       		  
-      		}   		
-      	  
+      		var that = this     		      		  
+   			  _.each(templates, function(render, name){
+  			    // render onto given element or default to root widget element
+  		      log.debug("Linking template: %s on %s", name, render.id || that.element[0])
+    			  that._linkTemplate( render.id, name, render.data )    			    
+  			  })
       	},
 
       	_loadTemplates: function( templates ){
       		var that = this
-      		
-      		if ( that._hasValues(templates) ) {
-      		  
-      		  // jsrender preloads templates for speed
-            // and requires templates feed in as { name: template_text }
-        		var tmpl = {}
-    		    _.each(templates, function(render, name){
-    		      log.debug("Adding template: %s", name)
-              tmpl[name] = render.tmpl;
-            })
-
-            $.templates(tmpl);
-       		  
-      		}   		
-      	  
+  		    _.each(templates, function(render, name){
+  		      log.debug("Adding template: %s", name)
+            that._loadTemplate(name, render.tmpl)
+          })
       	},
-      	
-      	_hasValues: function( obj ){
-      	  var hasValues = false;
-
-      		if ( typeof obj === "object" && obj !== null ) {
-      			_.each( obj, function() {
-      				return !(hasValues = true);
-      			});
-      		}
-      		 return hasValues;
+      	     	
+      	_loadTemplate: function(){
+      	  $.templates.apply( null, arguments )
       	},
     
       	_renderTemplate: function(el, template, data){
@@ -210,9 +131,5 @@ define('coffee/ui', ['utils/log', 'jquery', 'underscore', 'widget', 'jsrender', 
       	  $.link[template]( id, data ); 
       	}
     });
-    
-    return {
-      DEFAULTS: DEFAULTS
-    }
  
 })

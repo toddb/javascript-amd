@@ -1,66 +1,56 @@
-describe("ui, events", function() {
+describe("ui, loading", function() {
   
-  beforeEach(_requires(["coffee/ui"], function( l ){ loader = l }));
+  beforeEach(_requires(["coffee/ui"]));
   
-  // it("should be able to register add order handler for a FORM and have it invoked on click", function() {
-  //   
-  //   $('<form id="handler">').appendTo('#test')
-  //   spyOn(loader, 'add').andCallThrough()
-  //   var promise = jasmine.createSpy().andReturn( data );
-  // 
-  //   loader.orderHandler( '#test', promise )
-  //   
-  //   $('#handler').submit()
-  //   
-  //   expect(loader.add).toHaveBeenCalledWith( data )
-  //   expect(promise).toHaveBeenCalled()
-  // });
-  
-  it("should return DEFAULTS", function() {
-    expect(loader.DEFAULTS).not.toBeNull();
-  });
-  
-  xit("should attach widget to dom element", function() {
-      el = $('#test').teller( loader.DEFAULTS );
+  it("should attach widget to dom element", function() {
+      el = $('#test').teller();
+      expect(el.html()).toBe("");
       el.teller('destroy')
+      expect(el.html()).toBe("");
   });
   
 });
 
-describe("ui, templates", function() {
+describe("ui, templates - render & link", function() {
   
-  var el, loader, settings,
-    instructions = "<b>hi<ul id='instructionslist'></ul></b>",
-    
-    item = "<li>{{:val}}</li>",
-    data = { val: 'me' },
-    
-    coffeeTypes = [{type:'small'}],
-    newOrder = "<select>{{:type}}</select>",
-    
+  var el,  
     render = {
         instructions: {
-          tmpl: instructions
+          tmpl: "<b>hi<ul id='instructionslist'></ul></b>"
         } 
-      }
-
-  beforeEach(_requires(["coffee/ui"] ));
+    },
+    link = {
+      orders: {
+        tmpl: "<li>{{:val}}</li>",
+        data: { val: 'me' },
+        id: '#instructionslist'
+      }      
+    }
   
   it("should render instructions with the list wrapper", function() {
      el = $('#test').teller( { render: render });
      expect($('#instructionslist').size()).toEqual(1);
   });
+
+  it("should render select using options", function() {
+    el = $('#test').teller();
+    el.teller('option', 'render', render)
+    expect($('#instructionslist').size()).toEqual(1);
+
+  });
   
   it("should link list to instructions", function() {
-    var link = {
-      orders: {
-        tmpl: item,
-        data: data,
-        id: '#instructionslist'
-      }      
-    }
     el = $('#test').teller( { render: render, link: link } );
     expect($('#instructionslist>li', el).size()).toEqual(1);    
+  });
+  
+  
+  it("should link list to instructions via options", function() {
+    el = $('#test').teller( { render: render } );
+    el.teller('option', 'link', link)
+    expect($('#instructionslist>li', el).size()).toEqual(1);    
+    
+    expect(el.teller('option', 'link')).toEqual(link, '.teller("option", "buttons") getter');
   });
   
   afterEach(function() {
@@ -69,41 +59,44 @@ describe("ui, templates", function() {
 
 });
 
-xdescribe("ui, options", function() {
-  
-  describe("buttons", function() {
-    
+describe("ui, buttons", function() {
+     
     it("should callback on Add", function() {
       
-      var buttons = {
-        'Order New Coffee': function(ev, ui){
-          expect(this).toEqual(el[0], "content of callback");
+      var ok_click = jasmine.createSpy(),
+        render = {
+          Ok: {
+            tmpl: "<button type='button'>Ok</button>"
+          }
+        },
+        buttons = {
+          Ok: function(ev, ui){
+            ok_click()
+            expect(this).toEqual(el[0], "content of callback");
+            expect(ev.target).toEqual(btn[0], "event target");
+          }
         }
-      }
       
-      el = $('<div>').teller( { buttons: buttons });
+      el = $('#test').teller( { buttons: buttons, render: render });
       btn = $("button", el)
       
       expect(btn.length).toEqual(1, "number of buttons");
       
+      // check handler is called
       btn.click();
+      expect(ok_click).toHaveBeenCalled()
       
       newButtons = {
-    		"Close": function(ev, ui) {
-    			equal(this, el[0], "context of callback");
-    			equal(ev.target, btn[0], "event target");
-    		}
+    		Close: function(ev, ui) {}
     	};
     	
-    	expect(el.teller("option", "buttons")).toEqual(buttons, '.teller("option", "buttons") getter');
+    	expect(el.teller("option", "buttons")).toEqual(buttons, '.teller("option", "buttons") getter - original set');
     	el.teller("option", "buttons", newButtons)
-    	expect(el.teller("option", "buttons")).toEqual(newButtons, '.teller("option", "buttons") getter');
+    	expect(el.teller("option", "buttons")).toEqual(newButtons, '.teller("option", "buttons") getter - newly added');
     	
       
       el.teller('destroy')
     });
     
-    
-  });
   
 });
