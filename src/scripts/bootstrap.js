@@ -21,13 +21,13 @@ require(
         'utils/log',
         'requirejs',
         'jquery',
+        'jsrender',
+        'jsobservable',
+        'jsviews',
         'ui-core',
         'ui-widget',
         'order',
         'text',
-        'jsrender',
-        'jsobservable',
-        'jsviews',
         'date',
         'bootstrap-html'
 

@@ -55,7 +55,7 @@
         },
         {
           name: 'rest-coffee/main',
-          exclude: [ 'jquery', 'utils/log', 'text', 'jsrender', 'jsobservable', 'jsviews', 'date', 'ui-core', 'ui-widget', 'underscore']
+          exclude: [ 'jquery', 'utils/log', 'text', 'jsrender', 'jsobservable', 'jsviews', 'date', 'lib/ui', 'lib/widget', 'underscore', 'order']
         },
         {
           name: 'bootstrap-html',

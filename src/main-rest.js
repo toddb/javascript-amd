@@ -6,7 +6,6 @@ require.config({
       text:      'lib/requirejs/text-1.0.7',
       json:    'lib/requirejs/json-0.0.1',
       
-      
       jsrender:     'lib/jsviews/jsrender-1.0pre',
       jsobservable: 'lib/jsviews/jsobservable-1.0pre',
       jsviews:      'lib/jsviews/jsviews-1.0pre',

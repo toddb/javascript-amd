@@ -1,4 +1,4 @@
-define('coffee/ui', ['utils/log', 'jquery', 'underscore', 'widget', 'jsrender', 'jsobservable', 'jsviews', 'date'], function( log, $, _, widget ){
+define('coffee/ui', ['utils/log', 'jquery', 'underscore', 'lib/widget', 'lib/ui'], function( log, $, _, widget, ui ){
   
   log.loader('coffee/ui')
   
@@ -39,19 +39,14 @@ define('coffee/ui', ['utils/log', 'jquery', 'underscore', 'widget', 'jsrender', 
         
         addOrder: function( val ){
           // default add on end
-          $.observable(this.options.orders).insert( this.options.orders.length, val);
+          ui.observable(this.options.orders).insert( this.options.orders.length, val);
           this._trigger( "added", this, val )
         },
         
         removeOrder: function( index, numToRemove ){
           // adjust for zero-based index
-          var removed = $.observable(this.options.orders).remove( index - 1, numToRemove || 1)
+          var removed = ui.observable(this.options.orders).remove( index - 1, numToRemove || 1)
           this._trigger( 'removed', this, removed )
-        },
-
-        refresh: function( orders ){
-          $.observable(this.options.orders).refresh( index, numToRemove || 1)
-          this._trigger( 'refreshed', this, id )         
         },
         
         /* Public options */
@@ -100,37 +95,42 @@ define('coffee/ui', ['utils/log', 'jquery', 'underscore', 'widget', 'jsrender', 
    			  _.each(templates, function(render, name){
    			    log.debug("Rendering template: %s", name)
   			    // render onto given element or default to root widget element
-    			  that._renderTemplate( render.id || that.element[0], name, render.data || {} )    			    
+    			  that._renderTemplate( name, render.into || that.element[0], render.data || {} )    			    
   			  })
       	},
       	
-      	_linkTemplates: function( templates, store ){
+      	_linkTemplates: function( links, store ){
       		var that = this     		      		  
-   			  _.each(templates, function(render, name){
+   			  _.each(links, function(link, name){
   			    // render onto given element or default to root widget element
-  		      log.debug("Linking template: %s on %s", name, render.id)
-    			  that._linkTemplate( render.id, name, store )    			    
+  		      log.debug("Linking template: %s on %s", name, link.into)
+    			  that._linkTemplate( name, link.into, store )    			    
   			  })
       	},
 
       	_loadTemplates: function( templates ){
       		var that = this
+      		// templates can arrive in short or long form
+      		// (eg { instructions: "<b>bla</b>"} )
+      		// short { tmplName: txt } 
+      		// long: { tmplName: { tmpl: txt }}
   		    _.each(templates, function(render, name){
-  		      log.debug("Adding template: %s", name)
-            that._loadTemplate(name, render.tmpl)
+  		      txt = (typeof render === 'string') ? render : render.txt
+  		      log.debug("Adding template: %s", name, txt)
+            that._loadTemplate(name, txt)
           })
       	},
       	     	
-      	_loadTemplate: function(name, tmpl){
-      	  $.templates( name, tmpl )
+      	_loadTemplate: function(name, txt){
+      	  ui.templates( name, txt )
       	},
     
-      	_renderTemplate: function(el, template, data){
-      	  $( el ).append( $.templates[template].render( data ) )
+      	_renderTemplate: function(name, el, data){
+      	  $( el ).append( ui.templates[name].render( data ) )
       	},
       	
-      	_linkTemplate: function(id, template, data){
-          $.link[template]( id, data );
+      	_linkTemplate: function(name, id, data){
+          ui.link[name]( id, data );
       	}
     });
  

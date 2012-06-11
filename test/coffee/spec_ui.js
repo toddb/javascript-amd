@@ -16,13 +16,13 @@ describe("ui, templates - render & link", function() {
   var el,  
     render = {
         instructions: {
-          tmpl: "<b>hi<ul id='instructionslist'></ul></b>"
+          txt: "<b>hi<ul id='instructionslist'></ul></b>"
         } 
     },
     link = {
       orders: {
-        tmpl: "<li>{{:val}}</li>",
-        id: '#instructionslist'
+        txt: "<li>{{:val}}</li>",
+        into: '#instructionslist'
       }      
     },
     order = { val: 'me' }
@@ -32,13 +32,25 @@ describe("ui, templates - render & link", function() {
      expect($('#instructionslist').size()).toEqual(1);
   });
 
+  it("should render instructions with the list wrapper - short form", function() {
+     el = $('#test').teller( { render: { instructions: render.instructions.txt } });
+     expect($('#instructionslist').size()).toEqual(1);
+  });
+  
   it("should render select using options", function() {
     el = $('#test').teller();
     el.teller('option', 'render', render)
     expect($('#instructionslist').size()).toEqual(1);
 
   });
-  
+
+  it("should render select using options - short form", function() {
+    el = $('#test').teller();
+    el.teller('option', 'render', { instructions: render.instructions.txt })
+    expect($('#instructionslist').size()).toEqual(1);
+
+  });
+    
   it("should render linked list", function() {
     el = $('#test').teller( { render: render, link: link } );
     // now add order
@@ -69,9 +81,7 @@ describe("ui, buttons", function() {
       
       var ok_click = jasmine.createSpy(),
         render = {
-          Ok: {
-            tmpl: "<button type='button'>Ok</button>"
-          }
+          Ok:  "<button type='button'>Ok</button>"
         },
         buttons = {
           Ok: function(ev, ui){

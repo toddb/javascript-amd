@@ -10,18 +10,16 @@ define('rest-coffee/main',
       
      orders = $('body').teller({
        render: {
-         instructions: {
-           tmpl: require('text!coffee/views/index.html')
-         },
+         instructions: require('text!coffee/views/index.html'),
          newOrder: {
-           tmpl: require('text!coffee/views/_new.html'),
-           id: "#new-coffee"
+           txt: require('text!coffee/views/_new.html'),
+           into: "#new-coffee"
          }
        },
        link: {
          orders: {
-           tmpl: require('text!coffee/views/_item.html'),
-           id: "#coffee-orders"
+           txt: require('text!coffee/views/_item.html'),
+           into: "#coffee-orders"
          }
        },
        create: function(){
@@ -32,20 +30,23 @@ define('rest-coffee/main',
           $('.date').easydate();
        },
        buttons: {
-         New: function( event, ui ){
+         'Order New Coffee': function( event, ui ){
            $('#new-coffee').show()
+           $('button.order').hide()
          },
          Submit: function( event, ui ){
            
+           // collect the values from the inputs
            var order = {}
            _.each($(event.toElement).siblings(), function(input){
              order[input.name] = input.value
            })
 
-           $.when( addOrderPromise(order) )
+           $.when( createOrder(order) )
             .done( function( item, statusText, jqXhrOk ){
               // a successful order will be added to the observable store
               orders.teller('addOrder', item )
+              $('button.order').show()
             })
             .progress(function(){
               $('#new-coffee').hide()
@@ -57,61 +58,61 @@ define('rest-coffee/main',
          }
        }
      })
-
-   })
     
-  function addOrderPromise( order ){
-     var result = new $.Deferred();
-     result.notify("Begin");
-     link
-         .post(ordersRepresentation, 'collection', '*', order, 'json')
-         .done(function (content, status, settings) {
-             var orderUrl = settings.getResponseHeader('Location');
-             log.debug('Order created at ' + orderUrl);
-             // Get the order
-             httpCall
-                 .get(orderUrl, 'application/json')
-                 .done(function (order, statusText, jqXhrOk) {
-                     log.debug('Query new order suceeded');
-                     result.resolveWith(this, [order, statusText, jqXhrOk]);
-                 })
-                 .fail(function (jqXhrf2, status2, message) {
-                     result.rejectWith(this, [jqXhrf2, status2, message]);
-                 });
-         })
-         .fail(function (jqXhrf1, status1, message) {
-             result.rejectWith(this, [jqXhrf1, status1, message]);
-         });
-     return result.promise();   
-  }
+      function createOrder( order ){
+         var result = new $.Deferred();
+         result.notify("Begin");
+         link
+             .post(ordersRepresentation, 'collection', '*', order, 'json')
+             .done(function (content, status, settings) {
+                 var orderUrl = settings.getResponseHeader('Location');
+                 log.debug('Order created at ' + orderUrl);
+                 // Get the order
+                 httpCall
+                     .get(orderUrl, 'application/json')
+                     .done(function (order, statusText, jqXhrOk) {
+                         log.debug('Query new order suceeded');
+                         result.resolveWith(this, [order, statusText, jqXhrOk]);
+                     })
+                     .fail(function (jqXhrf2, status2, message) {
+                         result.rejectWith(this, [jqXhrf2, status2, message]);
+                     });
+             })
+             .fail(function (jqXhrf1, status1, message) {
+                 result.rejectWith(this, [jqXhrf1, status1, message]);
+             });
+         return result.promise();   
+      }
 
-  function getOrders(){
-    link
-      .get('HEAD', 'collection', 'application/json')
-      .done( function( content, status, settings ){
+      function getOrders(){
+        link
+          .get('HEAD', 'collection', 'application/json')
+          .done( function( content, status, settings ){
 
-          ordersRepresentation = content
+              ordersRepresentation = content
 
-          $.when( _.map(content.orders, function( order ){
-            return httpCall.get( order.href, order.type )
-          }))
-          .done( function( data ){
-            _.each( data, function( entry ){
-              entry
-                .done( function( item, status, settings  ){
-                  orders.teller('addOrder', item )
+              $.when( _.map(content.orders, function( order ){
+                return httpCall.get( order.href, order.type )
+              }))
+              .done( function( data ){
+                _.each( data, function( entry ){
+                  entry
+                    .done( function( item, status, settings  ){
+                      orders.teller('addOrder', item )
+                    })
+                    .fail( function( jqXhr, status, message ){
+                      log.error( "Items error occured: %s - %s", status, message)
+                    })
                 })
-                .fail( function( jqXhr, status, message ){
-                  log.error( "Items error occured: %s - %s", status, message)
-                })
-            })
+              })
+
           })
-
-      })
-      .fail( function( jqXhr, status, message ){
-         log.error( "HEAD collection error occurred: %s - %s", status, message )
-      })
-  }
+          .fail( function( jqXhr, status, message ){
+             log.error( "HEAD collection error occurred: %s - %s", status, message )
+          })
+      }
+  
+  })
   
 });    
 
