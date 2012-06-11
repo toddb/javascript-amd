@@ -19,7 +19,7 @@ describe("Events - add order", function() {
   });
     
   it("should save the order and update the view to the customer", function() {
-    var link = require('coffee/link')
+    var link = require('coffee/loader')
     spyOn($, 'observable').andCallThrough()
     
     loader.add.call( link, data )

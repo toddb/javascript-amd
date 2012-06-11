@@ -43,7 +43,7 @@ describe("Html views", function() {
     }));
     
     it("has a size item", function() {
-      var select = $("input[name='size']", "#test" )
+      var select = $("input[name='type']", "#test" )
       expect(select.size()).toEqual(1);
       expect(select.val()).toEqual("small");
     });

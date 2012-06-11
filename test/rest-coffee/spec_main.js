@@ -1,5 +1,7 @@
 describe("Loading rest coffee", function() {
   
+  var widget
+  
   beforeEach(function(){ 
     $('<link rel="collection" type="application/json" href="http://localhost:8888/orders/current">').prependTo('HEAD') 
 
@@ -38,7 +40,7 @@ describe("Loading rest coffee", function() {
     
     var orders, original_orders
     
-    beforeEach( _requires(['rest-coffee/main']) );
+    beforeEach( _requires(['rest-coffee/main'], function(main){ widget = main }) );
     
     describe("Load up and click to enter new", function() {
       
@@ -66,7 +68,7 @@ describe("Loading rest coffee", function() {
         // select a new order
         $( 'input', $('#new-coffee')).val('small')         
         // submit
-        $( 'form', $('#new-coffee')).submit()
+        $( ':submit', $('#new-coffee')).click()
 
         waitsFor( function(){
           // new order is added 
@@ -74,7 +76,6 @@ describe("Loading rest coffee", function() {
         })
 
         runs(function(){
-          console.log($('li'))
           // and we've hidden the form
           expect($('#new-coffee').is(':visible')).toBeFalsy();         
           // and added the order
@@ -91,7 +92,7 @@ describe("Loading rest coffee", function() {
     runs(function(){
       $.mockjaxClear();
       $('link[rel="collection"]').remove()  
-      $('#coffee').empty()    
+      widget.teller('destroy')
     })
 
   });

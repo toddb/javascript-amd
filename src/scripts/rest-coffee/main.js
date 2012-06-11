@@ -7,8 +7,9 @@ define('rest-coffee/main',
   var orders, ordersRepresentation;
     
   $( function(){
-      
-     orders = $('body').teller({
+     
+     orders = $('<div>').appendTo('body')
+     orders.teller({
        render: {
          instructions: require('text!coffee/views/index.html'),
          newOrder: {
@@ -113,6 +114,8 @@ define('rest-coffee/main',
       }
   
   })
+  
+  return orders
   
 });    
 
