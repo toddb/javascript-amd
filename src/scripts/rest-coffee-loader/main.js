@@ -1,11 +1,10 @@
-define('rest-coffee/main',
-  ['utils/log', 'jquery', 'underscore', 'utils/semanticLink', 'coffee/loader', 'utils/httpCall',
+define(['utils/log', 'jquery', 'underscore', 'utils/semanticLink', 'coffee/loader', 'utils/httpCall',
   'text!coffee/views/index.html',
   'text!coffee/views/_item.html',
   'text!coffee/views/_new.html' ], 
   function( log, $, _, link, loader, httpCall, index, item_, new_  ){
   
-  log.loader("rest-coffee/main")
+  log.loader("rest-coffee-loader/main")
     
   $( function(){
      var ordersRepresentation;

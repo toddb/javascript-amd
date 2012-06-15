@@ -1,9 +1,8 @@
-define("coffee/main", 
+define(
 ['utils/log', 'jquery', 'coffee/loader',
 'text!coffee/views/index.html',
 'text!coffee/views/_item.html',
-'text!coffee/views/_new.html',
-'coffee/ui'
+'text!coffee/views/_new.html'
 ], 
 function( log, $, loader, index, item_, new_ ){
   

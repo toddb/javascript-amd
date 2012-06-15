@@ -1,8 +1,8 @@
-define('rest-coffee/main',
+define(
   ['utils/log', 'jquery', 'underscore', 'utils/semanticLink', 'utils/httpCall', 'date', 'coffee/ui' ], 
   function( log, $, _, link, httpCall){
   
-  log.loader("rest-coffee/main")
+  log.loader("rest-coffee-layered/main")
   
   var orders, ordersRepresentation;
     

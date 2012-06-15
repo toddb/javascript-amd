@@ -8,6 +8,7 @@ require(
   '../../test/coffee/spec_main',
   '../../test/coffee/spec_ui',
   '../../test/rest-coffee/spec_main',
+  '../../test/rest-coffee/spec_main-layered',
   
   '../../test/utils/spec_semanticLink',
   '../../test/utils/spec_httpCall',

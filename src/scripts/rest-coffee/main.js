@@ -1,5 +1,4 @@
-define('rest-coffee/main',
-  ['utils/log', 'jquery', 'underscore', 'utils/semanticLink', 'utils/httpCall', 'lib/ui', 'date' ], 
+define( ['utils/log', 'jquery', 'underscore', 'utils/semanticLink', 'utils/httpCall', 'lib/ui', 'date' ], 
   function( log, $, _, link, httpCall, ui){
   
   log.loader("rest-coffee/main")

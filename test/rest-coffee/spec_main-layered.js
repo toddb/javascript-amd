@@ -1,4 +1,4 @@
-describe("nonlayered, Loading rest coffee", function() {
+describe("Loading rest coffee", function() {
   
   var widget
   
@@ -40,7 +40,7 @@ describe("nonlayered, Loading rest coffee", function() {
     
     var orders, original_orders
     
-    beforeEach( _requires(['rest-coffee/main'], function(main){ widget = main }) );
+    beforeEach( _requires(['rest-coffee-layered/main'], function(main){ widget = main }) );
     
     describe("Load up and click to enter new", function() {
       
@@ -92,7 +92,7 @@ describe("nonlayered, Loading rest coffee", function() {
     runs(function(){
       $.mockjaxClear();
       $('link[rel="collection"]').remove()  
-      widget.remove()
+      widget.teller('destroy')
     })
 
   });
