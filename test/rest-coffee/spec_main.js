@@ -4,7 +4,7 @@ describe("Loading rest coffee", function() {
   
   beforeEach(function(){ 
     $('<link rel="collection" type="application/json" href="http://localhost:8888/orders/current">').prependTo('HEAD') 
-
+    
     // response for the collection
     $.mockjax({
       url: '*/orders/current',
