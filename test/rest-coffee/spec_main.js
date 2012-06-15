@@ -1,4 +1,4 @@
-describe("nonlayered, Loading rest coffee", function() {
+describe("Non-layered, Loading rest coffee", function() {
   
   var widget
   

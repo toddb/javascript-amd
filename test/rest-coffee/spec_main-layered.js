@@ -1,4 +1,4 @@
-describe("Loading rest coffee", function() {
+describe("Layered, loading rest coffee", function() {
   
   var widget
   
