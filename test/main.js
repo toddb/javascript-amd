@@ -15,6 +15,8 @@ require({
       'ui-widget': 'lib/jquery-ui/jquery.ui.widget',
       underscore:  'lib/utils/underscore-1.2.3',
       date:        'lib/utils/easydate-0.2.4',
+      // when:        'lib/utils/when',
+      // deferred:    'lib/utils/deferred',
       
       "jasmine": '../../lib/jasmine/jasmine',
       "jasmine-html": '../../lib/jasmine/jasmine-html',
@@ -51,8 +53,14 @@ require({
               // add a div element to attach tests
               $('<div>', { id:'test', class:'test'}).appendTo('body')
               onerror.init();
-              jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
-          	  jasmine.getEnv().execute();       
+              
+              with (jasmine.getEnv()){
+                // jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
+                addReporter( new jasmine.HtmlReporter());
+                updateInterval = 100;
+                defaultTimeoutInterval = 1000;
+                execute();
+              }
       })
 
     }

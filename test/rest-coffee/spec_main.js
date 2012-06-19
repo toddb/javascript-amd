@@ -47,18 +47,18 @@ describe("Non-layered, Loading rest coffee", function() {
       beforeEach(function() {
 
          waitsFor( function(){
-           orders = $('li').size()
+           orders = $('li', widget).size()
            return orders == 3
          })
 
          runs(function(){
-           original_orders = $('li').size();  
+           original_orders = $('li', widget).size();  
            // click the button
            $('button.order').click() 
            // and the new order is displayed
            expect($('#new-coffee').is(':visible')).toBeTruthy();   
            // with no new orders added
-           expect($('li').size()).toEqual(original_orders);
+           expect($('li', widget).size()).toEqual(original_orders);
         })
         
         
@@ -72,14 +72,14 @@ describe("Non-layered, Loading rest coffee", function() {
 
         waitsFor( function(){
           // new order is added 
-          return $('li').size() == orders + 1
+          return $('li', widget).size() == orders + 1
         })
 
         runs(function(){
           // and we've hidden the form
           expect($('#new-coffee').is(':visible')).toBeFalsy();         
           // and added the order
-          expect($('li').size()).toEqual(original_orders+1);        
+          expect($('li', widget).size()).toEqual(original_orders+1);        
         })
 
       });

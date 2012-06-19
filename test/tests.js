@@ -12,5 +12,6 @@ require(
   
   '../../test/utils/spec_semanticLink',
   '../../test/utils/spec_httpCall',
+  '../../test/utils/spec_deferred'
   ]
 )

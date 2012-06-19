@@ -176,9 +176,7 @@ define(
                  });
              }
              else {
-                 var failed = new $.Deferred();
-                 failed.reject(null /* no jqXhr*/, 'Error', 'The resource doesn\'t support the required interface');
-                 return failed.promise();
+                 return $.Deferred().reject(null /* no jqXhr*/, 'Error', 'The resource doesn\'t support the required interface');
              }
          }
 
