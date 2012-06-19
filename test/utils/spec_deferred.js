@@ -1,11 +1,11 @@
 describe("Deferred promise", function() {
   
-  var result, when, _;
+  var deferred, when, _;
   
-  beforeEach(_requires(['utils/deferred', 'utils/when', 'underscore'], function(d, w, u){ result = d; when = w; _=u }));
+  beforeEach(_requires(['utils/deferred', 'utils/when', 'underscore'], function(d, w, u){ deferred = d; when = w; _=u }));
   
   it("should return deferred object", function() {
-    expect($.Deferred).toMatch(result());
+    expect($.Deferred).toMatch(deferred());
   });
   
   it("should resolve with", function() {
@@ -18,7 +18,7 @@ describe("Deferred promise", function() {
       });
     
     function sync(){
-      return result().resolve()
+      return deferred().resolve()
     }  
     
     expect(ok).toHaveBeenCalled();
@@ -35,7 +35,7 @@ describe("Deferred promise", function() {
       });
     
     function sync(){
-      return result().resolve()
+      return deferred().resolve()
     }  
     
     expect(ok).toHaveBeenCalled();
@@ -56,11 +56,11 @@ describe("Deferred promise", function() {
       });
     
     function sync(){
-      return result().resolveWith(this, ["bla1"] )
+      return deferred().resolveWith(this, ["bla1"] )
     }  
 
     function secondsync(){
-      return result().resolveWith("secondSync",["bla2"])
+      return deferred().resolveWith("secondSync",["bla2"])
 
     }
         
@@ -175,7 +175,7 @@ describe("Deferred promise", function() {
     
     spyOn(console, 'debug').andCallThrough();
         
-    var dfd = result("Checker", logger )
+    var dfd = deferred("Checker", logger )
     
     dfd.done( function(){ logger("in done")} )
     dfd.resolve( 're' )
@@ -190,7 +190,7 @@ describe("Deferred promise", function() {
     
     var logger = jasmine.createSpy('logger')
         
-    var dfd = result("Checker", logger )
+    var dfd = deferred("Checker", logger )
     
     dfd.done( function(){ logger('in done')} )
     dfd.resolve( 're' )
