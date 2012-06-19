@@ -5,7 +5,7 @@ describe("Deferred promise", function() {
   beforeEach(_requires(['utils/deferred', 'utils/when', 'underscore'], function(d, w, u){ result = d; when = w; _=u }));
   
   it("should return deferred object", function() {
-    expect($.Deferred).toMatch(result);
+    expect($.Deferred).toMatch(result());
   });
   
   it("should resolve with", function() {
@@ -18,7 +18,7 @@ describe("Deferred promise", function() {
       });
     
     function sync(){
-      return result.resolve()
+      return result().resolve()
     }  
     
     expect(ok).toHaveBeenCalled();
@@ -35,7 +35,7 @@ describe("Deferred promise", function() {
       });
     
     function sync(){
-      return result.resolve()
+      return result().resolve()
     }  
     
     expect(ok).toHaveBeenCalled();
@@ -56,11 +56,11 @@ describe("Deferred promise", function() {
       });
     
     function sync(){
-      return $.Deferred().resolveWith(this, ["bla1"] )
+      return result().resolveWith(this, ["bla1"] )
     }  
 
     function secondsync(){
-      return $.Deferred().resolveWith("secondSync",["bla2"])
+      return result().resolveWith("secondSync",["bla2"])
 
     }
         
@@ -174,20 +174,8 @@ describe("Deferred promise", function() {
     }
     
     spyOn(console, 'debug').andCallThrough();
-    
-    var deferred = function( context, logger ){
-      return $.Deferred( function(deferred){
-        _.each(['done', 'fail', 'progress'], function( handler ){
-          deferred[handler]( function(){ 
-            var args = _.toArray(arguments)
-            _(args).unshift(handler).unshift(context)
-            logger.apply(this, args)
-          })
-        })
-      })
-    }
-    
-    var dfd = deferred("Checker", logger )
+        
+    var dfd = result("Checker", logger )
     
     dfd.done( function(){ logger("in done")} )
     dfd.resolve( 're' )
@@ -201,20 +189,8 @@ describe("Deferred promise", function() {
   it("should log events - logger", function() {
     
     var logger = jasmine.createSpy('logger')
-    
-    var deferred = function( context, logger ){
-      return $.Deferred( function(deferred){
-        _.each(['done', 'fail', 'progress'], function( handler ){
-          deferred[handler]( function(){ 
-            var args = _.toArray(arguments)
-            _(args).unshift(handler).unshift(context)
-            logger.apply(this, args)
-          })
-        })
-      })
-    }
-    
-    var dfd = deferred("Checker", logger )
+        
+    var dfd = result("Checker", logger )
     
     dfd.done( function(){ logger('in done')} )
     dfd.resolve( 're' )
