@@ -198,7 +198,7 @@ describe("Deferred promise", function() {
     
   }); 
   
-  it("should log events", function() {
+  it("should log events - logger", function() {
     
     var logger = jasmine.createSpy('logger')
     
@@ -220,8 +220,12 @@ describe("Deferred promise", function() {
     dfd.resolve( 're' )
     
     expect(logger.callCount).toEqual(2);
+    
     /* this will fail because jasmine calls contains rather than equality */
     // expect(logger).toHaveBeenCalledWith(['Checker', 'done', 're'], ['in done']);
+    expect(logger).toHaveBeenCalledWith('Checker', 'done', 're');
+    expect(logger).toHaveBeenCalledWith("in done");
+    
     expect(logger.calls[0].args).toEqual(['Checker', 'done', 're']);
     expect(logger.calls[1].args).toEqual(['in done']);
     
