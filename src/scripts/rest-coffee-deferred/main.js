@@ -1,58 +1,70 @@
 define( ['utils/log', 'jquery', 'underscore', 'utils/semanticLink', 'utils/httpCall', 'lib/ui', 'utils/deferred', 'date' ], 
   function( log, $, _, link, httpCall, ui, deferred){
   
-  log.loader("rest-coffee/main")
+  log.loader("rest-coffee-deferred/main")
     
   var el, ordersRepresentation;
     
   $( function(){
     
       var orders = []
-    
-      ui.templates({
-          instructions: require('text!coffee/views/index.html'),
-          orders: require('text!coffee/views/_item.html'),
-          newOrder: require('text!coffee/views/_new.html')
-      });
-
-      el = $('<div>')
-        .append( ui.templates.instructions.render( {} ) )
-        .appendTo('body')
-        
-      $('#new-coffee').append( ui.templates.newOrder.render( '#new-coffee', {} ))
-     
-      ui.link.orders( "#coffee-orders", orders );
       
-      $('#new-coffee').hide() 
-      $('.date').easydate();      
+      $.when( init(orders) )
+        .done( function(){
+          
+              $(':button(:contains(Order New Coffee))').click(function(){
+               $('#new-coffee').show()
+               $('button.order').hide()       
+              })  
 
-      $(':button(:contains(Order New Coffee))').click(function(){
-       $('#new-coffee').show()
-       $('button.order').hide()       
-      })  
+              $(':submit[value=Submit]').click(function( event ){
 
-      $(':submit[value=Submit]').click(function( event ){
-        
-        $('#new-coffee').hide()
-        
-        var order = {}
-        _.each($(event.toElement).siblings(), function(input){
-          order[input.name] = input.value
+                $('#new-coffee').hide()
+
+                var order = {}
+                _.each($(event.toElement).siblings(), function(input){
+                  order[input.name] = input.value
+                })
+
+                $.when( createOrder(order) )
+                 .done( function( item, statusText, jqXhrOk ){
+                   ui.observable(orders).insert( orders.length, order );
+                   $('button.order').show()
+                   $('#new-coffee').hide()
+                 })
+                 .progress(function(){
+                   $('#new-coffee').hide()
+                 })
+                 .fail( function( jqXhr, status, message ){
+                    $('#new-coffee').show()
+                 })       
+              })
         })
+       
+      function init( orders ){  
+        var instructions = 'text!coffee/views/index.html',
+          orders = 'text!coffee/views/_item.html',
+          newOrder = 'text!coffee/views/_new.html'
+        
+        ui.templates({
+            instructions: require(instructions),
+            orders: require(orders),
+            newOrder: require(newOrder)
+        });
 
-        $.when( createOrder(order) )
-         .done( function( item, statusText, jqXhrOk ){
-           ui.observable(orders).insert( orders.length, order );
-           $('button.order').show()
-           $('#new-coffee').hide()
-         })
-         .progress(function(){
-           $('#new-coffee').hide()
-         })
-         .fail( function( jqXhr, status, message ){
-            $('#new-coffee').show()
-         })       
-      })
+        el = $('<div>')
+          .append( ui.templates.instructions.render( {} ) )
+          .appendTo('body')
+
+        $('#new-coffee').append( ui.templates.newOrder.render( '#new-coffee', {} ))
+
+        ui.link.orders( "#coffee-orders", orders );
+
+        $('#new-coffee').hide() 
+        $('.date').easydate();
+
+        return $.Deferred().resolve([instructions, orders, newOrder])
+      }
      
       function createOrder( order ){
          var result = $.Deferred();
@@ -104,8 +116,6 @@ define( ['utils/log', 'jquery', 'underscore', 'utils/semanticLink', 'utils/httpC
         .fail( function( jqXhr, status, message ){
            log.error( "HEAD collection error occurred: %s - %s", status, message )
         })
-
-  
   })
   
   return el

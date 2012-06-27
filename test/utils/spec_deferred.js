@@ -181,9 +181,7 @@ describe("Deferred promise", function() {
     dfd.resolve( 're' )
     
     expect(console.debug).toHaveBeenCalledWith(['Checker', 'done', 're']);
-    expect(console.debug).toHaveBeenCalledWith(["in done"]);
-    
-    
+    expect(console.debug).toHaveBeenCalledWith(["in done"]); 
   }); 
   
   it("should log events - logger", function() {
@@ -202,9 +200,43 @@ describe("Deferred promise", function() {
     expect(logger).toHaveBeenCalledWith('Checker', 'done', 're');
     expect(logger).toHaveBeenCalledWith("in done");
     
+    /* However, the calls above don't check for order or how many times a spy is called */
     expect(logger.calls[0].args).toEqual(['Checker', 'done', 're']);
     expect(logger.calls[1].args).toEqual(['in done']);
-    
-    
   }); 
+
+  it("should log events - adding callback into jquery", function() {
+
+    var logger = jasmine.createSpy('logger')
+
+    $.DEFAULT_DEFERRED = function(deferred){
+      var context = "Checker"
+      // add handler for each of the known promise callbacks
+      _.each(['done', 'fail', 'progress'], function( handler ){
+        deferred[handler]( function(){
+          var args = _.toArray(arguments)
+          // add handler and context as arguments to pass through
+          _(args).unshift(handler).unshift(context || "")
+          logger && logger.apply(this, args)
+        })
+      })
+    }
+           
+    var dfd = $.Deferred()
+
+    dfd.done( function(){ logger('in done')} )
+    dfd.resolve( 're' )
+
+    expect(logger.callCount).toEqual(2);
+
+    /* this will fail because jasmine calls contains rather than equality */
+    // expect(logger).toHaveBeenCalledWith(['Checker', 'done', 're'], ['in done']);
+    expect(logger).toHaveBeenCalledWith('Checker', 'done', 're');
+    expect(logger).toHaveBeenCalledWith("in done");
+
+    /* However, the calls above don't check for order or how many times a spy is called */
+    expect(logger.calls[0].args).toEqual(['Checker', 'done', 're']);
+    expect(logger.calls[1].args).toEqual(['in done']);
+
+  });
 });

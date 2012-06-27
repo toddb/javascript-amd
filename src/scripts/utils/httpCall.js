@@ -18,7 +18,7 @@ define(
                   } 
                 })
                 .fail(function (jqXhr, status, message) {
-                        log.debug('HTTP %s of "%s" failed ( %s ), and no error handler was defined', verb, url, message || "");
+                  log.debug('HTTP %s of "%s" failed ( %s ), and no error handler was defined', verb, url, message || "");
                 })
         }
         
