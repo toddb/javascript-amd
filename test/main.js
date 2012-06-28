@@ -22,6 +22,7 @@ require({
       "jasmine-html": '../../lib/jasmine/jasmine-html',
       "require-jasmine": '../../lib/require-jasmine',
       "require-onerror": '../../lib/require-onerror',
+      "jasmine-rest": '../../lib/jasmine-rest',
       "mockjax": '../../lib/mockjax',
       "bootstrap-html": '../../build/scripts/bootstrap-html',
       "server-data": '../../build/scripts/server/main',
@@ -30,7 +31,7 @@ require({
       },
       priority: ["jquery", "bootstrap"]
     },
-    ['jquery', 'require-onerror', 'utils/log', 'json', 'order!jasmine', 'order!jasmine-html', 'order!require-jasmine', 'order!mockjax', 'server-data', 'order!tests'], 
+    ['jquery', 'require-onerror', 'utils/log', 'json', 'order!jasmine', 'order!jasmine-html', 'order!require-jasmine', 'order!mockjax', 'order!jasmine-rest', 'server-data', 'order!tests'], 
     function( $, onerror, log ){
   
       $(function(){
