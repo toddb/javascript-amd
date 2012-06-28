@@ -50,6 +50,8 @@ define(
       }
     }
     
+    // TODO: this requires init, clear & set - to link it into the jQuery
+    
     return deferred
   
 });
