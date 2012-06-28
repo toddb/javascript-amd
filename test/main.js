@@ -22,7 +22,7 @@ require({
       "jasmine-html": '../../lib/jasmine/jasmine-html',
       "require-jasmine": '../../lib/require-jasmine',
       "require-onerror": '../../lib/require-onerror',
-      "jasmine-rest": '../../lib/jasmine-rest',
+      "jasmine-rest": '../../lib/jasmine-promise',
       "mockjax": '../../lib/mockjax',
       "bootstrap-html": '../../build/scripts/bootstrap-html',
       "server-data": '../../build/scripts/server/main',
