@@ -31,7 +31,7 @@ describe("Layered, loading rest coffee", function() {
       responseText: require('json!server/orders/1.json'),
        // and return Location header http://localhost:8888/orders/4 of the created resource
       headers: {'Location': 'http://localhost:8888/orders/4' },
-      async: false
+      async: true
     });
     
   });

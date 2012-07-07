@@ -13,6 +13,7 @@ require(
   '../../test/utils/spec_semanticLink',
   '../../test/utils/spec_httpCall',
   '../../test/utils/spec_deferred',
-  '../../test/utils/spec_functional-test-spike'
+  '../../test/utils/spec_functional-test-spike',
+  '../../test/utils/spec_functional-test-spike-promise'
   ]
 )
