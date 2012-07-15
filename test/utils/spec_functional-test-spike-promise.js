@@ -19,16 +19,7 @@ describe("Promise (returning promise) functional test", function() {
           expect($('#new-coffee', this.widget).is(':visible')).toBeTruthy();
 
           $( 'input', $('#new-coffee')).val('small');  
-          $( ':submit', $('#new-coffee')).click();
-console.log("should almost be last!")
-			// waitsFor(function () {
-			//     return $('li', this.widget).size() == 4
-			// }, 'new order to be added')
-			// 
-			// runs(function(){
-			// 	expect($('#new-coffee', this.widget).is(':visible')).toBeFalsy();
-			// })
-		  
+          $( ':submit', $('#new-coffee')).click();		  
 
       })
 			
