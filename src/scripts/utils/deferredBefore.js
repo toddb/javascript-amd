@@ -44,6 +44,7 @@ define(
         // add handler for each of the known promise callbacks
         _.each(['done', 'fail', 'progress'], function( handler ){
           deferred[handler]( function(){
+            console.log(_.mergeDeferred( context, this, arguments))
             logger && logger(_.mergeDeferred( context, this, arguments))
           })
         })
