@@ -23,7 +23,7 @@ describe("Promise (returning promise) functional test", function() {
 
       })
 			
-			//with('#new-coffee').wasClicked().became(':hidden')
+			// uses explicit selector for both
 	  	wasClicked('#new-coffee')
 	  	became('#new-coffee', ':hidden')
       posts('http://localhost:8888/orders', Json, returning(OK, { Location: 'http://localhost:8888/orders/4'}));
@@ -60,6 +60,7 @@ describe("Promise 2 (returning promise) functional test", function() {
 
       })
 			
+			// uses implicit selector for the second
 	  	wasClicked('#new-coffee')
 	  	became(':hidden')
       posts('http://localhost:8888/orders', Json, returning(OK, { Location: 'http://localhost:8888/orders/4'}));
@@ -95,6 +96,8 @@ describe("Promise 3 (returning promise) functional test", function() {
 
       })
 			
+			
+			// uses implicit selector for the second but other way around from other
 	  	became('#new-coffee',':hidden')
 	  	wasClicked()
       posts('http://localhost:8888/orders', Json, returning(OK, { Location: 'http://localhost:8888/orders/4'}));
@@ -106,7 +109,7 @@ describe("Promise 3 (returning promise) functional test", function() {
 
 });
 
-describe("Promise 4 (returning promise) functional test", function() {
+describe("Promise 4 - ignore because of xload", function() {
   
   beforeEach(function() {
     $('<link rel="collection" type="application/json" href="http://localhost:8888/orders/current">').prependTo('HEAD')
@@ -114,11 +117,7 @@ describe("Promise 4 (returning promise) functional test", function() {
 
   xload('rest-coffee-promise/main', function(){
 		
- 		using(function(){
-           
-      		  
-
-    })
+ 		using(function(){   })
             
     }
   )
