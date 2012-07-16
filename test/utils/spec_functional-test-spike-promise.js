@@ -106,7 +106,7 @@ describe("Promise 3 (returning promise) functional test", function() {
 
 });
 
-describe("Promise 3 (returning promise) functional test", function() {
+describe("Promise 4 (returning promise) functional test", function() {
   
   beforeEach(function() {
     $('<link rel="collection" type="application/json" href="http://localhost:8888/orders/current">').prependTo('HEAD')
