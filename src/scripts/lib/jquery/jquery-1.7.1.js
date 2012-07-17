@@ -1271,11 +1271,6 @@ jQuery.extend({
 		}, failList.disable, progressList.lock ).fail( function() {
 			state = "rejected";
 		}, doneList.disable, progressList.lock );
-
-    // TODO: workout a much better home - tb, june 2012
-    if (jQuery.DEFAULT_DEFERRED) {
-      jQuery.DEFAULT_DEFERRED.call( deferred, deferred )
-    }
     
 		// Call given func if any
 		if ( func ) {
