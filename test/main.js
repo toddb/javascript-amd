@@ -26,6 +26,7 @@ require({
 			'jasmine-promise-deferred': '../../lib/jasmine-promise-deferred',
 			"jasmine-waitsfor-extensions": '../../lib/jasmine-waitsfor-extensions',
 			"jasmine-core-extensions": '../../lib/jasmine-core-extensions',
+			proxy: '../../lib/proxy',
       "mockjax": '../../lib/mockjax',
       "bootstrap-html": '../../build/scripts/bootstrap-html',
       "server-data": '../../build/scripts/server/main',

@@ -4,6 +4,8 @@ require(
  
  '../../test/spec_events',
  '../../test/spec_loading',
+
+ '../../test/spec_proxy',
  
  '../../test/coffee/spec_main',
  '../../test/coffee/spec_ui',
