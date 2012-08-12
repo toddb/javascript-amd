@@ -47,7 +47,7 @@ define(
 						// only deal with calls that have arguments
 						var args = _.mergeDeferred( context, this, arguments)
 						if (args.length > 1) {
-							console.log("   --", args)
+							// console.log("   --", args)
 							logger && logger(args)
 						}
           })
