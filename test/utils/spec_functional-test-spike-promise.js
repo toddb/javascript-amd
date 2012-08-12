@@ -1,119 +1,71 @@
 
 describe("Promise (returning promise) functional test", function() {
+	
+	var init = function(tests){
+
+    gets('http://localhost:8888/orders/current', Json, returning(OK, 'json!server/orders/current.json'));
+    showing('text!coffee/views/index.html', 'text!coffee/views/_item.html', 'text!coffee/views/_new.html');
+    gets('http://localhost:8888/orders/1', Json, returning(OK, 'json!server/orders/1.json'));
+    gets('http://localhost:8888/orders/2', Json, returning(OK, 'json!server/orders/1.json'));
+    gets('http://localhost:8888/orders/3', Json, returning(OK, 'json!server/orders/1.json'));
+
+    using(function(){
+
+        $('button.order', this.widget).click()
+        expect($('#new-coffee', this.widget).is(':visible')).toBeTruthy();
+
+        $( 'input', $('#new-coffee')).val('small');  
+        $( ':submit', $('#new-coffee')).click();		  
+
+    })
+
+		tests();
+		
+    posts('http://localhost:8888/orders', Json, returning(OK, { Location: 'http://localhost:8888/orders/4'}));
+    gets('http://localhost:8888/orders/4', Json, returning(OK, 'json!server/orders/1.json'));
+		
+	}
 
   beforeEach(function() {
     $('<link rel="collection" type="application/json" href="http://localhost:8888/orders/current">').prependTo('HEAD')
   });
-	
 
   load(['rest-coffee-promise/main', 'using explicit selector for both was and became'], function(){
 
-      gets('http://localhost:8888/orders/current', Json, returning(OK, 'json!server/orders/current.json'));
-      showing('text!coffee/views/index.html', 'text!coffee/views/_item.html', 'text!coffee/views/_new.html');
-      gets('http://localhost:8888/orders/1', Json, returning(OK, 'json!server/orders/1.json'));
-      gets('http://localhost:8888/orders/2', Json, returning(OK, 'json!server/orders/1.json'));
-      gets('http://localhost:8888/orders/3', Json, returning(OK, 'json!server/orders/1.json'));
-
-      using(function(){
-
-          $('button.order', this.widget).click()
-          expect($('#new-coffee', this.widget).is(':visible')).toBeTruthy();
-
-          $( 'input', $('#new-coffee')).val('small');  
-          $( ':submit', $('#new-coffee')).click();		  
-
-      })
-
-			// uses explicit selector for both
-	  	was('clicked', '#new-coffee')
-	  	became('#new-coffee', ':hidden')
-      posts('http://localhost:8888/orders', Json, returning(OK, { Location: 'http://localhost:8888/orders/4'}));
-      gets('http://localhost:8888/orders/4', Json, returning(OK, 'json!server/orders/1.json'));
-
-
+      init( function(){
+		  	was('clicked', '#new-coffee')
+		  	became('#new-coffee', ':hidden')
+			})
     }
   )
 
   load(['rest-coffee-promise/main', 'using implicit selector for second for became'], function(){
 
-      gets('http://localhost:8888/orders/current', Json, returning(OK, 'json!server/orders/current.json'));
-      showing('text!coffee/views/index.html', 'text!coffee/views/_item.html', 'text!coffee/views/_new.html');
-      gets('http://localhost:8888/orders/1', Json, returning(OK, 'json!server/orders/1.json'));
-      gets('http://localhost:8888/orders/2', Json, returning(OK, 'json!server/orders/1.json'));
-      gets('http://localhost:8888/orders/3', Json, returning(OK, 'json!server/orders/1.json'));
+    	init( function(){
+		  	was('clicked', '#new-coffee')
+		  	became('#new-coffee', ':hidden')
+			})
 
-      using(function(){
-
-          $('button.order', this.widget).click()
-          expect($('#new-coffee', this.widget).is(':visible')).toBeTruthy();
-
-          $( 'input', $('#new-coffee')).val('small');  
-          $( ':submit', $('#new-coffee')).click();		  
-
-      })
-
-			// uses implicit selector for the second
-	  	was('clicked', '#new-coffee')
-	  	became(':hidden')
-      posts('http://localhost:8888/orders', Json, returning(OK, { Location: 'http://localhost:8888/orders/4'}));
-      gets('http://localhost:8888/orders/4', Json, returning(OK, 'json!server/orders/1.json'));
-
-
-    }
+     }
   )
 
   load(['rest-coffee-promise/main', 'using implicit on second but for was'], function(){
 
-      gets('http://localhost:8888/orders/current', Json, returning(OK, 'json!server/orders/current.json'));
-      showing('text!coffee/views/index.html', 'text!coffee/views/_item.html', 'text!coffee/views/_new.html');
-      gets('http://localhost:8888/orders/1', Json, returning(OK, 'json!server/orders/1.json'));
-      gets('http://localhost:8888/orders/2', Json, returning(OK, 'json!server/orders/1.json'));
-      gets('http://localhost:8888/orders/3', Json, returning(OK, 'json!server/orders/1.json'));
-
-      using(function(){
-
-          $('button.order', this.widget).click()
-          expect($('#new-coffee', this.widget).is(':visible')).toBeTruthy();
-
-          $( 'input', $('#new-coffee')).val('small');  
-          $( ':submit', $('#new-coffee')).click();		  
-
-      })
-
-			// uses implicit selector for the second but other way around from other
-	  	became('#new-coffee',':hidden')
-	  	was('clicked')
-      posts('http://localhost:8888/orders', Json, returning(OK, { Location: 'http://localhost:8888/orders/4'}));
-      gets('http://localhost:8888/orders/4', Json, returning(OK, 'json!server/orders/1.json'));
-
+    	init( function(){
+		  	became('#new-coffee',':hidden')
+		  	was('clicked')
+			})
 
     }
   )
 
   load(['rest-coffee-promise/main', 'using explicit selector setting and then others all implicit'], function(){
 
-      gets('http://localhost:8888/orders/current', Json, returning(OK, 'json!server/orders/current.json'));
-      showing('text!coffee/views/index.html', 'text!coffee/views/_item.html', 'text!coffee/views/_new.html');
-      gets('http://localhost:8888/orders/1', Json, returning(OK, 'json!server/orders/1.json'));
-      gets('http://localhost:8888/orders/2', Json, returning(OK, 'json!server/orders/1.json'));
-      gets('http://localhost:8888/orders/3', Json, returning(OK, 'json!server/orders/1.json'));
-
-      using(function(){
-
-          $('button.order', this.widget).click()
-          expect($('#new-coffee', this.widget).is(':visible')).toBeTruthy();
-
-          $( 'input', $('#new-coffee')).val('small');  
-          $( ':submit', $('#new-coffee')).click();		  
-
-      })
-
-			_$('#new-coffee')
-	  	became(':hidden')
-	  	was('clicked')
-      posts('http://localhost:8888/orders', Json, returning(OK, { Location: 'http://localhost:8888/orders/4'}));
-      gets('http://localhost:8888/orders/4', Json, returning(OK, 'json!server/orders/1.json'));
-
+	  	init( function(){
+				_$('#new-coffee')
+		  	became(':hidden')
+		  	was('clicked')
+			})
 
     }
   )
