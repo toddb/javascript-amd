@@ -40,12 +40,17 @@ describe("Promise-FIT, loading rest coffee", function() {
 	    gets('http://localhost:8888/orders/1', Json, returning(OK, 'json!server/orders/1.json'));
 	    gets('http://localhost:8888/orders/2', Json, returning(OK, 'json!server/orders/1.json'));
 	    gets('http://localhost:8888/orders/3', Json, returning(OK, 'json!server/orders/1.json'));
-	
-	    using(function(){
-					waitsFor(function(){
-						return $('ul#coffee-orders>li').size() >= 3
-					}, "waiting for the three orders to be rendered")
-	    })			
+			
+			using(function(){
+				
+				$('button.order', this.widget).click()
+        
+		    expecting("three orders to be rendered", function(){ 
+					return $('ul#coffee-orders>li').size() >= 3 
+				})				
+				
+			})
+
 	})
 	
   afterEach(function () {
