@@ -1,4 +1,4 @@
-describe("Layered, loading rest coffee", function () {
+describe("Promise, loading rest coffee", function () {
 
     beforeEach(function () {
         $('<link rel="collection" type="application/json" href="http://localhost:8888/orders/current">').prependTo('HEAD')
@@ -35,7 +35,7 @@ describe("Layered, loading rest coffee", function () {
 
     });
 
-    describe("Loading and displaying current orders,", function () {
+    describe("Loading and displaying current orders", function () {
 
         beforeEach(_requires(['rest-coffee-promise/main'], function (main) {
             var that = this

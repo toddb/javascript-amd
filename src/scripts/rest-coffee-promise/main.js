@@ -5,7 +5,7 @@ define( ['utils/log', 'jquery', 'underscore', 'utils/semanticLink', 'utils/httpC
                 parent: 'body'
             },
             orders = [];
-
+				
         function init( settings ){
 
             var result = $.Deferred(),
@@ -84,6 +84,10 @@ define( ['utils/log', 'jquery', 'underscore', 'utils/semanticLink', 'utils/httpC
 
         }
 
+				function destroy(){
+					 orders = []
+				}
+
         function create( orders, settings ){
             var result = $.Deferred(),
                 instructions = 'text!coffee/views/index.html',
@@ -138,7 +142,8 @@ define( ['utils/log', 'jquery', 'underscore', 'utils/semanticLink', 'utils/httpC
 
 
         return {
-            init: init
+            init: init,
+						destroy: destroy
         }
 
     });

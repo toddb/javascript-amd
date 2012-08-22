@@ -4,7 +4,7 @@ require(
  
  '../../test/spec_events',
  '../../test/spec_loading',
-
+ 
  '../../test/spec_proxy',
  
  '../../test/coffee/spec_main',
@@ -12,6 +12,7 @@ require(
  '../../test/rest-coffee/spec_main',
  '../../test/rest-coffee/spec_main-layered',
  '../../test/rest-coffee/spec_main-promise',
+ '../../test/rest-coffee/spec_main-promise-fit',
   
  '../../test/utils/spec_semanticLink',
  '../../test/utils/spec_httpCall',
