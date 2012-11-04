@@ -10,6 +10,8 @@
 require(
     [
         'json!server/orders/1.json',
+        'json!server/orders/2.json',
+        'json!server/orders/3.json',
         'json!server/orders/current.json'
     ]
 );

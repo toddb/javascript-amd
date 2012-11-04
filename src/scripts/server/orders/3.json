@@ -1,0 +1,13 @@
+{
+  "links": [
+    { "rel": "alternate", "type": "text/html", "href": "http://localhost:8888/orders/.html/3" },
+    { "rel": "collection", "type": "application/json", "href": "http://localhost:8888/orders"},
+    { "rel": "self", "type": "application/json", "href": "http://localhost:8888/orders/.json/3" },
+    { "rel": "self", "type": "*/*", "href": "http://localhost:8888/orders/3" },
+    { "rel": "edit", "type": "text/html", "href": "http://localhost:8888/orders/.html/3" }
+  ],
+  "type": "large", 
+  "ordered": "first",
+  "created-by": "mary",
+  "created-on": "first"
+}

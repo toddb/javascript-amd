@@ -58,6 +58,10 @@
           exclude: [ 'jquery', 'utils/log', 'text', 'jsrender', 'jsobservable', 'jsviews', 'date', 'lib/ui', 'lib/widget', 'underscore', 'order']
         },
         {
+          name: 'rest-coffee-promise/main',
+          exclude: [ 'jquery', 'utils/log', 'text', 'jsrender', 'jsobservable', 'jsviews', 'date', 'lib/ui', 'lib/widget', 'underscore', 'order']
+        },
+        {
           name: 'bootstrap-html',
           exclude: [ 'text', 'utils/log' ]
         },

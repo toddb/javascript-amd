@@ -3,6 +3,7 @@
     { "rel": "alternate", "type": "text/html", "href": "http://localhost:8888/orders/.html/1" },
     { "rel": "collection", "type": "application/json", "href": "http://localhost:8888/orders"},
     { "rel": "self", "type": "application/json", "href": "http://localhost:8888/orders/.json/1" },
+    { "rel": "self", "type": "*/*", "href": "http://localhost:8888/orders/1" },
     { "rel": "edit", "type": "text/html", "href": "http://localhost:8888/orders/.html/1" }
   ],
   "type": "small", 

@@ -100,9 +100,10 @@ define(
         //   the string is a special case wildcard string of `*`
         //   the string matches the link string
         function matchParameter(linkString, matchString) {
+          //console.warn(linkString, matchString, linkString === matchString)
             return (_.isRegExp(matchString) && linkString.match(matchString)) ||
                 matchString === '*' ||
-                    linkString === matchString;
+                linkString === matchString;
         }
 
         // Get an array of links that match the given relationship type and

@@ -25,5 +25,5 @@ require.config({
         define: true
     },
 
-    priority: ["jquery", "bootstrap", "bootstrap-html", "rest-coffee/main"]
+    priority: ["jquery", "bootstrap", "bootstrap-html", "loader"]
 });
