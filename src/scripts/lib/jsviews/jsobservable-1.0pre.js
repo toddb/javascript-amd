@@ -6,6 +6,8 @@
  * Copyright 2012, Boris Moore and Brad Olenick
  * Released under the MIT License.
  */
+// informal pre beta commit counter: 21
+
 (function ( $, undefined ) {
 	$.observable = function( data, options ) {
 		return $.isArray( data )
@@ -16,10 +18,6 @@
 	var splice = [].splice;
 
 	function ObjectObservable( data ) {
-		if ( !this.data ) {
-			return new ObjectObservable( data );
-		}
-
 		this._data = data;
 		return this;
 	};
@@ -51,31 +49,41 @@
 				}
 			} else {
 				// Simple single property case.
-				var setter, property,
-					object = this._data,
+				var object = this._data,
 					leaf = getLeafObject( object, path );
 
 				path = leaf[1];
 				leaf = leaf[0];
 				if ( leaf ) {
-					property = leaf[ path ];
-					if ( $.isFunction( property )) {
-						// Case of property setter/getter - with convention that property() is getter and property( value ) is setter
-						setter = property;
-						property = property.call( leaf );	//get
-					}
-					if ( property != value ) { // test for non-strict equality, since serializeArray, and form-based editors can map numbers to strings, etc.
-						if ( setter ) {
-							setter.call( leaf, value );		//set
-							value = setter.call( leaf );	//get updated value
-						} else {
-							leaf[ path ] = value;
-						}
-						$( leaf ).triggerHandler( "propertyChange", { path: path, value: value, oldValue: property });
-					}
+					this._setProperty( leaf, path, value );
 				}
 			}
 			return this;
+		},
+
+		_setProperty: function( leaf, path, value ) {
+			var setter,
+			property = leaf[ path ];
+
+			if ( $.isFunction( property ) ) {
+				// Case of property setter/getter - with convention that property() is getter and property( value ) is setter
+				setter = property;
+				property = property.call( leaf ); //get
+			}
+
+			if ( property != value ) { // test for non-strict equality, since serializeArray, and form-based editors can map numbers to strings, etc.
+				if ( setter ) {
+					setter.call( leaf, value );		//set
+					value = setter.call( leaf );	//get updated value
+				} else {
+					leaf[ path ] = value;
+				}
+				this._trigger( leaf, { path: path, value: value, oldValue: property } );
+			}
+		},
+
+		_trigger: function( target, eventArgs ) {
+			$( target ).triggerHandler( "propertyChange", eventArgs );
 		}
 	};
 
@@ -93,16 +101,8 @@
 	};
 
 	function ArrayObservable( data ) {
-		if ( !this.data ) {
-			return new ArrayObservable( data );
-		}
-
 		this._data = data;
 		return this;
-	};
-
-	function triggerArrayEvent( array, eventArgs ) {
-		$([ array ]).triggerHandler( "arrayChange", eventArgs );
 	};
 
 	function validateIndex( index ) {
@@ -128,11 +128,15 @@
 				// data can be a single item (including a null/undefined value) or an array of items.
 
 				if ( data.length > 0 ) {
-					splice.apply( this._data, [ index, 0 ].concat( data ));
-					triggerArrayEvent( this._data, { change: "insert", index: index, items: data });
+					this._insert( index, data );
 				}
 			}
 			return this;
+		},
+
+		_insert: function( index, data ) {
+			splice.apply( this._data, [ index, 0 ].concat( data ));
+			this._trigger( { change: "insert", index: index, items: data } );
 		},
 
 		remove: function( index, numToRemove ) {
@@ -143,11 +147,15 @@
 				var items = this._data.slice( index, index + numToRemove );
 				numToRemove = items.length;
 				if ( numToRemove ) {
-					this._data.splice( index, numToRemove );
-					triggerArrayEvent( this._data, { change: "remove", index: index, items: items });
+					this._remove( index, numToRemove, items );
 				}
 			}
 			return this;
+		},
+
+		_remove: function( index, numToRemove, items ) {
+			this._data.splice( index, numToRemove );
+			this._trigger( { change: "remove", index: index, items: items } );
 		},
 
 		move: function( oldIndex, newIndex, numToMove ) {
@@ -157,18 +165,30 @@
 			numToMove = ( numToMove === undefined || numToMove === null ) ? 1 : numToMove;
 			if ( numToMove ) {
 				var items = this._data.slice( oldIndex, oldIndex + numToMove );
-				this._data.splice( oldIndex, numToMove );
-				this._data.splice.apply( this._data, [ newIndex, 0 ].concat( items ) );
-				triggerArrayEvent( this._data, { change: "move", oldIndex: oldIndex, index: newIndex, items: items });
+				this._move( oldIndex, newIndex, numToMove, items );
 			}
 			return this;
 		},
 
+		_move: function( oldIndex, newIndex, numToMove, items ) {
+			this._data.splice( oldIndex, numToMove );
+			this._data.splice.apply( this._data, [ newIndex, 0 ].concat( items ) );
+			this._trigger( { change: "move", oldIndex: oldIndex, index: newIndex, items: items } );
+		},
+
 		refresh: function( newItems ) {
 			var oldItems = this._data.slice( 0 );
-			splice.apply( this._data, [ 0, this._data.length ].concat( newItems ));
-			triggerArrayEvent( this._data, { change: "refresh", oldItems: oldItems });
+			this._refresh( oldItems, newItems );
 			return this;
+		},
+
+		_refresh: function( oldItems, newItems ) {
+			splice.apply( this._data, [ 0, this._data.length ].concat( newItems ));
+			this._trigger( { change: "refresh", oldItems: oldItems } );
+		},
+
+		_trigger: function( eventArgs ) {
+			$([ this._data ]).triggerHandler( "arrayChange", eventArgs );
 		}
 	};
 })(jQuery);
