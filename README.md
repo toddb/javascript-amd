@@ -8,7 +8,7 @@ Sample code in javascript to demonstrate the requirejs library (using node.js) a
 
 It demonstrates test-driven client-side Javascript development, including linting & validation, merging, and minification.
 
-It also demonstrates different types of testing: testing plain html, events and mocking.
+It also demonstrates different types of testing: testing plain html, events and mocking (using promised-based development).
 
 ## FEATURES/PROBLEMS:
 
@@ -22,7 +22,7 @@ It also demonstrates different types of testing: testing plain html, events and 
 
 ## SYNOPSIS:
 
-Use rake to see all tasks. Key tasks are build, test:acceptance and test:specs
+Use rake to see all tasks. Key tasks are build, test:acceptance and test:specs (and server:start && test:server)
 
 	$ rake -T
 	rake all              # Build and release
@@ -31,14 +31,29 @@ Use rake to see all tasks. Key tasks are build, test:acceptance and test:specs
 	rake build:compile    # Builds javascript through node.js
 	rake build:copy       # Copies files to the dist folder
 	rake clobber          # Removes all files from build and release
+	rake docs:compile     # Create the documentation set
+	rake docs:open        # Opens the documentation in a browser
 	rake release          # Build and release to server using upload.sh - (not che...
 	rake release:clean    # Cleans release folder
 	rake release:prepare  # Creates the release folder
+	rake server:start     # Starts test server on localhost:8888 - note: stdout is...
 	rake test             # Opens all tests and examples in browser
 	rake test:acceptance  # Run acceptance test in browser
 	rake test:example     # Show example
 	rake test:node        # Run spec tests in node.js
+	rake test:server      # Run the example against the server
 	rake test:specs       # Run spec tests in browser
+
+Actually,  use `cake server:start` and you'll actually get console logs of the requests.
+
+	$ cake server:start
+	node-router server instance at http://localhost:8888/
+
+	Static file server running at
+	  => http://localhost:8888/
+	CTRL + C to shutdown
+
+	127.0.0.1 - - [Mon, 05 Nov 2012 02:52:28 GMT] "GET /orders/current HTTP/1.1" Accept:text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8 - 200 - "" "Mozilla/5.0"
 
 ## REQUIREMENTS:
 
@@ -47,33 +62,21 @@ The app uses
 * ruby (currently using 1.8.7)
 * rake (currently 0.8.7)
 * node.js (currently 0.6.15)
-* npm
-* coffee-script
+* npm (currently 1.1.33)
 * python (currently 2.6.1)
 * Pygments (currently 1.5)
-* docco
 
-Tested on Max OSX with Mozilla 8 and Chrome 17.
+Tested on Max OS X (10.6.8) with Mozilla 14.0.1 and Chrome 22.
 
 ## ENVIRONMENT SETUP
 
 Install node which should come with Node Package Manager
 
 	$ node --version
-	v0.6.15
+	v0.8.1
 	$ npm --version
-	1.1.16
+	1.1.3
 
-Install coffee script (as root for global install and this ensure symlinks are setup)
-
-	# npm -g install coffee-script
-	$ coffee --version
-	CoffeeScript version 1.3.1
-
-Installing the ability to generate documentation:
-
-	# npm install docco -g
-	
 Installing Pygaments:
 
 From the tarball release
