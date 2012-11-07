@@ -27,6 +27,8 @@ require(
         'order!jsviews',
         'order!ui-core',
         'order!ui-widget',
+        'order!ui-effects-core',
+        'order!ui-effects-highlight',
         'text',
         'date',
         'bootstrap-html'

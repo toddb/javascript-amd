@@ -31,6 +31,8 @@
       jquery:      'lib/jquery/jquery-1.7.1',
       'ui-core':   'lib/jquery-ui/jquery.ui.core',
       'ui-widget': 'lib/jquery-ui/jquery.ui.widget',
+      'ui-effects-core': 'lib/jquery-ui/jquery.effects.core',
+      'ui-effects-highlight': 'lib/jquery-ui/jquery.effects.highlight',
       underscore:  'lib/utils/underscore-1.2.3',
       date:        'lib/utils/easydate-0.2.4',
       

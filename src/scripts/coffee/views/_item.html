@@ -1,4 +1,7 @@
 <li>
-  <i>{{:type}}</i> (<abbr class="date">{{:ordered}}</abbr>)
+  {{if viewing}}<i>{{:type}}</i> (<abbr class="date">{{:ordered}}</abbr>){{/if}}
+  {{if updating tmpl='update'/}}
+  {{if (updateable && viewing)}}<a rel="edit" href="{{:href}}" accept="{{:accept}}">Edit</a>{{/if}}
+  {{if (updateable && updating)}}<a rel="cancel" href="{{:href}}">Cancel</a>{{/if}}
   {{if removeable}}<input type="submit" href="{{:href}}" accept="{{:accept}}" value='Delete' />{{/if}}
 </li>

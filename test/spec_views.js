@@ -3,6 +3,7 @@ describe("Html views", function() {
   
   describe("Item", function() {
     beforeEach(_requires(["text!coffee/views/_item.html", 'jsrender'], function( text ){ 
+      data.viewing = true
       $( "#test" ).html( $.templates( text ).render( data ) );
     }));
     
@@ -18,9 +19,6 @@ describe("Html views", function() {
       expect($("li:contains('(1 min ago)')", "#test" )).toBeTruthy()
     });
     
-    afterEach(function() {
-      $( "#test" ).empty()
-    });
   });
   
   describe("Item - multiple", function() {
@@ -32,9 +30,6 @@ describe("Html views", function() {
       expect($("li", "#test" ).size()).toEqual(2);
     });
     
-    afterEach(function() {
-      $( "#test" ).empty()
-    });
   });
   
   describe("Add item", function() {
@@ -42,15 +37,15 @@ describe("Html views", function() {
       $( "#test" ).html( $.templates( text ).render( [data] ) );
     }));
     
-    it("has a size item", function() {
+    it("has a size item as radio buttons", function() {
       var select = $("input[name='type']", "#test" )
-      expect(select.size()).toEqual(1);
-      expect(select.val()).toEqual("small");
+      expect(select.size()).toEqual(3);
     });
-    
-    afterEach(function() {
-      $( "#test" ).empty()
-    });    
+       
+  });
+  
+  afterEach(function() {
+    $( "#test" ).empty()
   });
   
 });

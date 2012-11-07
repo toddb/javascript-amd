@@ -55,7 +55,7 @@ describe("Promise-FIT, loading rest coffee", function() {
 
   })
   
-  load(['rest-coffee-promise/main', 'delete order'], function(){
+  xload(['rest-coffee-promise/main', 'delete order'], function(){
 
     gets('http://localhost:8888/orders/current', Json, returning(OK, 'json!server/orders/current.json'));
     gets('http://localhost:8888/orders/1', Json, returning(OK, 'json!server/orders/1.json', { Allow: "DELETE" }));
@@ -79,6 +79,38 @@ describe("Promise-FIT, loading rest coffee", function() {
     })
     
     deletes('http://localhost:8888/orders/1', returning(OkNoEntity));
+
+  })
+
+  load(['rest-coffee-promise/main', 'update order'], function(){
+
+    gets('http://localhost:8888/orders/current', Json, returning(OK, 'json!server/orders/current.json'));
+    gets('http://localhost:8888/orders/1', Json, returning(OK, 'json!server/orders/1.json', { Allow: "DELETE,PUT" }));
+    gets('http://localhost:8888/orders/2', Json, returning(OK, 'json!server/orders/2.json', { Allow: "DELETE" }));
+    gets('http://localhost:8888/orders/3', Json, returning(OK, 'json!server/orders/3.json'));
+    
+    using(function(){
+      
+      expecting("the list to be rendered", function(){ 
+        return $('ul#coffee-orders>li').size() == 3
+      })
+      
+      runs( function(){
+         var item = $('a[rel=edit][href=http://localhost:8888/orders/1]', this.widget)
+         
+         item.click()
+         console.error(item)
+         $(':input[name=type][type=text]').val('large-xxx')
+         $(':submit[value=Update]').click()
+      })
+      
+    })
+    
+    var update = {
+      "type": "large-xxx"
+    }
+    
+    puts('http://localhost:8888/orders/1', Json, update, returning(OkNoEntity));
 
   })
   

@@ -11,9 +11,24 @@ define( ['underscore', 'utils/semanticLink'], function(_, link){
 
       var accept = accept || '*/*'
       var controlData = {}
+      controlData.viewing = true
+      controlData.updating = false /* [viewing|updating] */
+      controlData.updateable = /PUT/i.test(response.getResponseHeader('Allow'))
       controlData.removeable = /DELETE/i.test(response.getResponseHeader('Allow'))
       controlData.accept = accept
       controlData.href = link.filter( item, 'self', accept)[0].href || ""
+      
+      controlData.state = function( state ){
+        if (state=='viewing'){
+          this.updating = false
+          this.viewing = true
+        }
+        if (state=='updating'){
+          this.updating = true
+          this.viewing = false
+        }
+        return this
+      }
 
       return _.extend(controlData, item)
     }

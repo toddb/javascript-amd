@@ -17,7 +17,12 @@ server.get("/orders/current", 'application/json', function (req, res) {
 });
 
 server.get("/orders/1", 'application/json', function (req, res) {
-  res.json(200, "orders/1.json", [['Allow', 'DELETE']] );
+  res.json(200, "orders/1.json", [['Allow', 'DELETE,PUT']] );
+});
+
+server.put("/orders/1", '*', function (req, res) {
+  res.writeHead(204, { Vary: 'Accept'});
+  res.end()
 });
 
 server.get("/orders/2", 'application/json', function (req, res) {
@@ -36,7 +41,7 @@ server.get("/orders/.*", "*", router.staticDirHandler('./src',   '/orders') )
 server.get("/build/.*", "*",  router.staticDirHandler('./build', '/build') )
 
 server.post("/orders", '*', function(req, res){
-  res.created( '/orders/1.json' )
+  res.created( '/orders/1' )
 })
 
 server.del("/orders/3", "*", function(req, res){

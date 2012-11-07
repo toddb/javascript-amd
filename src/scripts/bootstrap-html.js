@@ -4,6 +4,7 @@ require(
         'utils/log',
         'text!coffee/views/index.html',
         'text!coffee/views/_new.html',
+        'text!coffee/views/_update.html',
         'text!coffee/views/_item.html'
     ],
     function(copyright, log) {
